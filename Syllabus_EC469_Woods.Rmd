@@ -1,0 +1,229 @@
+---
+title: "Syllabus EC469/569 Winter 2021"
+author: "James Woods"
+date: ""
+output: pdf_document
+fontsize: 12pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Course Description
+
+>General survey of empirical techniques useful for economic analysis. Focus on the applications of mathematical tools and regression analysis in economics. Quantitative topics will be introduced systematically with hands-on case studies and examples related to the fields of economics, public policy, and urban studies. This course will not be counted as credit for economics graduate students, but may be taken by graduate students in other programs.
+
+Econometrics is the glue that connects what you learned in your theory classes and what you observe in the world.  The world is messy and does not always give us clear answers but with the proper use of statistics, survey research, experiments and quasi-experimental design we can create tight arguments for causal connections.
+
+Besides learning the theoretical foundations of econometrics we will also work on the practical nuts and bolts of working in teams to create credible, replicable analysis with a modern tool set that include R, RStudio, Markdown and git.
+
+The course also comes with a warning.  When you are done with this course you will be overconfident in you ability to use regression as a tool.  
+
+## Prerequisites
+
+The course has a few prerequisites.  Ec 201 and Ec 202 will be removed as a prerequisite starting next year.  In much of the text we will be maximizing likelihood functions or minimizing least squares. Mth 251 is a necessity to understand these concept. Stat 243 and Stat 244 are required so that we can be sure you understand a few things about probability distributions, hypotheses tests and sampling.
+
+
+## Key Dates
+
+# Contact Information
+
+Communication will be handled through slack https://FILLIN.slack.com. You should have received an invitation, if not, just go to that URL and use your @pdx.edu email to sign up. There are reasonable help documents to get you started. https://get.slack.help/hc/en-us/articles/218080037-Getting-started-for-new-users
+
+Slack will be used for IM, email and forum style communication.  It even handles voice calls. If you have a question about course material or the course itself, ask in one of the channels, e.g., #general. If you have a personal message that is not intended for others, send a direct message, i.e., @woodsj. The group has global do not disturb hours of 10pm - 8am.  If you would like something different, alter your personal settings.
+
+
+Please note that I am not online all the time, and when I am online I will prioritize well-phrased questions with sufficient detail.  I tend to ignore general complaints, questions that can be answered by reading the syllabus or using the search bar.
+
+Office Hours:
+
++ There are no in-person office hours this term.  We will use Zoom to meet face-to-face. 
++ Drop in office hours are Monday 3-4pm and Tuesday 10am-Noon through the last week of classes. I will keep a Zoom meeting up during this time.
++ You can schedule one-on-one meetings at https://woodsj.youcanbook.me/.
+
+# Textbook and Other Resources
+
+There are two primary textbooks for the course.  The main textbook for econometric theory is Wooldridge, Jeffrey M. Introductory Econometrics: A Modern Approach, ed 5-7 New York: Thomson.  Any edition after the 4th is acceptable.  Choose as your budget permits. The text is excellent.
+
+The major supplement is Heiss, Florian Using R for Introductory Econometrics, ed 2.  Hard copies are available for purchase but the book can be read online http://www.urfie.net/read/index.html.  This will help out implementing econometrics in R that you learn in Wooldridge text.
+
+This is intended to be a cost savings for student.  The 7th edition of Wooldridge may be rented for $176 with material similar to the Heiss supplement and online homework. 
+
+
+# Proficiency-Based Course
+
+Given the uncertainties about how courses are going to be delivered and uncertainties about student and faculty health, I have made some changes to the structure of the class that will allow for more time flexibility.
+
+Your grade in the class will be determined by the number of modules you complete at an acceptable level.  The more modules you complete, the higher your grade.
+
+The homework assignments and quizzes for each module will be available for three weeks, but will be different in each of those three weeks.  If you don't acceptably complete a quiz and a homework assignment, you can not complete that module.
+
+
+Each module will include:
+
++ A series of readings and videos for you to review.  The readings will be from the textbooks and the videos will be a combination of videos that I have created and external videos.  This is intended to replace the one-to-many, sage-on-stage lectures, where there is little student interaction. 
+
+    + If you attend the Monday course meeting, please read the text and watch the videos before class.  Class time will not make much sense if you don't do the readings first
+    + The Monday meeting will be devoted to the current module(s).
+    
+
++ After you review the material you will complete a quiz in D2L. If the quiz performance is acceptable -- you may complete the homework  for that module.
+
+    + These quizzes are timed and intended to take 20 to 30 minutes but will stop you from continuing after 60 minutes.
+    + They will, most commonly, consist of multiple choice questions
+    + **Module quizzes must be completed by 5pm Wednesday**.
+    + The acceptable score will vary by quiz, but will be the same for all students.
+    + If your quiz score is unacceptable, you will be able to take a similar quiz the next week.
+    + Quizzes will be available for three weeks
+
+
++ Once you pass
+
+    + Homework assignments will generally be available by the Wednesday before the Monday they are due but may be up earlier.
+    + You may take as much time as you like on homework assignments.
+    + The **homework assignments will be due Monday at 11:59 pm**.  This allows us to grade the assignment before the regularly scheduled quiz time on Wednesday.
+    + If your homework is not of acceptable quality, you will be able to complete another assignment the next week and if that is acceptable, you may take the quiz then.
+    + Acceptable performance is not point based but will be identical for all students.
+    + Feedback on your answers will be given in D2L and will constitute the key.
+
+
+
+The regularly scheduled course time will be interactive and problem solving, focusing on getting you to use and understand the course material on a less superficial level. The Monday meeting will be devoted to the new module and the Wednesday meeting will be a mix of the new module and the last two modules.
+
+
+
+
+
+## P/NP Grades 
+
+PSU's policy on how P/NP grades will be used during the COVID-19 pandemic is in flux.  For Fall term, P/NP grades will count as letter grades for satisfying major and degree requirements.  
+
+Most faculty expect there to be an asterisk on pandemic period grades, but we can't guarantee how they will be perceived outside PSU.
+
+
+Please consult your funder for potential financial implications of switching to P/NP.  Not all scholarships will fund P/NP courses, and the VA may ask for a return of tuition, fees and associated BAH payments if the student does not pass the course.
+
+
+## Assignments
+
+## Planning for COVID-19 Flexibility
+
+
+There is a good chance that some of us will get sick. The [symptoms](https://www.cdc.gov/coronavirus/2019-ncov/symptoms-testing/symptoms.html) are generally known and the effects are anything between minor and major, temporary and permanent, and death.
+
+I can't plan for every contingency and, as of writing this, PSU has not given much in the way of guidance. Here is my proposed plan for illness that lasts for less than and more than two weeks for both students and faculty.
+
+
+### Student is Ill for _Less_ than Two Weeks
+### Student is Ill for _More_ than Two Weeks
+
+This means you have missed more than 20% of the class.  That is hard to make up.  What you should do at this point is file a deadline appeal.  You do that online at https://www.pdx.edu/registration/DAC.
+
+Fill out the electronic form saying that you were sick and attach documentation about your illness.  They require documentation and there is a procedure if you physically can't fill out the form on your own because of your illness. If your appeal is accepted, then this class will be removed from your transcript, not even a _W_ will be there, and you will have the associated tuition and fees returned.
+
+Please contact financial aid and your scholarship funder to talk about financial implications.  The rules are likely to be in flux.
+
+
+### Jamie is Ill
+
+Here is where there is less certainty and less flexibility.  We don't really have the ability to have backup for all our courses. There is no backup for this class.
+
+I will make an announcement if I can't make it to our regular meeting time. In that case, the zoom meeting will be canceled and the in-class work may or may not be rescheduled depending on the class schedule and how far ahead I have prepared in-class exercises. If I have already prepared exercises, the class will be led by the graduate assistant.
+
+If my illness extends beyond two absences, I will contact the chair of the department and work out what to do.  PSU has not done any contingency planning for faculty illness, incapacitation, hospitalization or death.  Sorry about not having details.
+
+### An Appeal
+
+All this flexibility comes at a cost to me.  I'm keeping large chunks of my calendar open for one-on-one meetings. 
+
+I am enthusiastic about helping students that take their education seriously and will aggressively defend and advocate for you in many ways. Make me feel like my effort was worth while.  This does not mean thanking me.  It means treating me like I'm someone trying to help you rather than a barrier you are trying to bypass with minimal effort.
+
+# Topics and Readings
+
+References to Wooldridge generally refer to the 5th edition of the book.  I am also supplementing the book with videos made by UO's Mark Thoma for his EC320 course, which is the rough equivalent of this course.  
+
+He will make a few references to the structure of his course, which is different than ours, the software they use, EViews, we will be using R and RStudio, and a different textbook. You can ignore these differences. The math, concepts and approaches apply to all courses at this level.  Please note that the chapter titles in the videos don't line up our textbook.
+
+We will use different empirical topics in class to illustrate the concepts.
+
+## Core Topics
+
+1. The Nature of Econometrics and Tool Set Up
+    + Wooldridge, Ch 1.
+    + Thoma Introduction https://youtu.be/e23KCzvKimc
+
+1. Statistical Review
+    + Wooldridge, Appendix B
+    + Thoma Part 1 Statistical Review https://youtu.be/e2JKX2hrTyE
+    + Thoma Part 2 Statistical Review https://youtu.be/OVw_925mGWY
+
+1. The Simple Regression Model
+    + Wooldridge, Ch 2.
+    + Thoma Part 1 Simple Regression https://youtu.be/Y7z6HyVeGj4
+    + Thoma Part 2 Simple Regression https://youtu.be/uZDzw_qb6xo
+    + Thoma Hypothosis Testing https://youtu.be/nLQt0fygyoc
+    
+1. Multiple Regression Analysis: Estimation
+    + Wooldridge, Ch 3.
+    + Wooldridge, Ch 7.1 - 7.3
+    + Thoma Intro Multiple Regression Part 1 https://youtu.be/So7eqxWivXE
+    + Thoma Intro Multiple Regression Part 2 https://youtu.be/mz8MGa-eqqI
+    
+1. Multiple Regression Analysis: Inference
+    + Wooldridge, Ch 4
+    + Thoma Multiple Regression Inference https://youtu.be/4OoUuYXNj_8
+    
+1. Multiple Regression: Other Details
+    + Wooldridge, Ch 6
+    + Wooldridge, Ch 7.4 - 7.6
+    + Thoma Nonlinearities https://youtu.be/JlmWX7hWMw8
+    + Thoma More Nonlinearities https://youtu.be/jROGZHBzz6c
+    + Thoma With Dummy Variables https://youtu.be/jROGZHBzz6c
+
+1. Specification and Data Issues
+    + Wooldridge, Ch 9
+    + Thoma on Specification and Data Issues https://youtu.be/vGehsmEIc6U
+
+
+## Optional Topics
+
+
+1. Heteroskadasticity 
+    + Wooldridge, Ch 8
+
+1. Basic Regression Analysis with Time Series Data
+    + Wooldridge, Ch 10
+    
+1. Serial Correlation and Heteroskedastiity in Time Series Regressions
+    + Wooldridge, Ch 12
+
+1. Instrumental Variable Regression
+    + Wooldridge, Ch 15
+
+
+# Other Rules
+
+
++ When completing online quizzes or other assignments, you may use your book, wiki, calculator, spreadsheets, notes, or other resources as long as it is not another student or person.  *The work must be authentically and genuinely your own. In other words, if you are copying answers you found online, it is not your work.*
+
++ In this classroom, we support and value diversity.  To do so requires that we:
+
+    + Respect the dignity and essential worth of all individuals
+    + Promote a culture of respect toward all individuals
+    + Respect the privacy, property, and freedom of others
+    + Reject bigotry, discrimination, violence, or intimidation of any kind
+    + Practice personal and academic integrity and expect it from others
+    + Promote the diversity of opinions, ideas, and backgrounds, which is the lifeblood of a university
+
+   For additional information, please see the Office of Affirmative Action \& Equal Opportunity at http://www.pdx.edu/diversity/affirmative-action.
+
+
++ Accommodations are collaborative efforts between students, faculty, and the Disability Resource Center.  If you have a documented disability and require accommodation, you must arrange to meet with the course instructor prior to or within the first week of the term.  The documentation of your disability must come in writing from the Disability Resource Center (Faculty letter).  Students who believe they are eligible for accommodations but who have not yet obtained approval through the DRC should contact the DRC immediately.  Reasonable and appropriate accommodations will be provided for students with documented disabilities.  For more information on the Disability Resource Center, please see http://www.drc.pdx.edu/. 
+
++ Academic honesty is expected and required of students enrolled in this course.  Suspected academic dishonesty in this course will be handled according to the procedures set out in the Student Code of Conduct.
+
++ I am sympathetic to family emergencies but you must inform me as soon as possible. If the notice is verbal, please email me with your understanding of our agreement. All agreements have to be in writing.
+
+Link to this syllabus https://github.com/woodsjam/Course-Intro-Econometrics. 
