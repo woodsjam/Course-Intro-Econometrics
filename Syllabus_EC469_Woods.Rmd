@@ -142,9 +142,9 @@ I am enthusiastic about helping students that take their education seriously and
 
 # Topics and Readings
 
-References to Wooldridge generally refer to the 5th edition of the book.  I am also supplementing the book with videos made by UO's Mark Thoma for his EC320 course, which is the rough equivalent of this course.  
+References to Wooldridge generally refer to the 5th edition of the book.  
 
-He will make a few references to the structure of his course, which is different than ours, the software they use, EViews, we will be using R and RStudio, and a different textbook. You can ignore these differences. The math, concepts and approaches apply to all courses at this level.  Please note that the chapter titles in the videos don't line up our textbook.
+I am also supplementing the book with videos made by UO's Mark Thoma for his EC320 course, which is the rough equivalent of this course.  He will make a few references to the structure of his course, which is different than ours, the software they use, EViews, we will be using R and RStudio, and a different textbook. You can ignore these differences. The math, concepts and approaches apply to all courses at this level.  Please note that the chapter titles in the videos don't line up our textbook.
 
 We will use different empirical topics in class to illustrate the concepts.
 
@@ -153,27 +153,33 @@ We will use different empirical topics in class to illustrate the concepts.
 1. The Nature of Econometrics and Tool Set Up
     + Wooldridge, Ch 1.
     + Thoma Introduction https://youtu.be/e23KCzvKimc
+    + Heiss, Ch 1.1 - 1.5
+    + Heiss, Ch 19 (Select Parts)
 
 1. Statistical Review
     + Wooldridge, Appendix B
     + Thoma Part 1 Statistical Review https://youtu.be/e2JKX2hrTyE
     + Thoma Part 2 Statistical Review https://youtu.be/OVw_925mGWY
+    + Heiss, Ch 1.6 - 1.10
 
 1. The Simple Regression Model
     + Wooldridge, Ch 2.
     + Thoma Part 1 Simple Regression https://youtu.be/Y7z6HyVeGj4
     + Thoma Part 2 Simple Regression https://youtu.be/uZDzw_qb6xo
     + Thoma Hypothosis Testing https://youtu.be/nLQt0fygyoc
+    + Heiss, Ch 2
     
 1. Multiple Regression Analysis: Estimation
     + Wooldridge, Ch 3.
     + Wooldridge, Ch 7.1 - 7.3
     + Thoma Intro Multiple Regression Part 1 https://youtu.be/So7eqxWivXE
     + Thoma Intro Multiple Regression Part 2 https://youtu.be/mz8MGa-eqqI
+    + Heiss, Ch 3
     
 1. Multiple Regression Analysis: Inference
     + Wooldridge, Ch 4
     + Thoma Multiple Regression Inference https://youtu.be/4OoUuYXNj_8
+    + Heiss, Ch 4
     
 1. Multiple Regression: Other Details
     + Wooldridge, Ch 6
@@ -181,10 +187,13 @@ We will use different empirical topics in class to illustrate the concepts.
     + Thoma Nonlinearities https://youtu.be/JlmWX7hWMw8
     + Thoma More Nonlinearities https://youtu.be/jROGZHBzz6c
     + Thoma With Dummy Variables https://youtu.be/jROGZHBzz6c
+    +  Heiss, Ch 6
+    + Heiss, Ch 7
 
 1. Specification and Data Issues
     + Wooldridge, Ch 9
     + Thoma on Specification and Data Issues https://youtu.be/vGehsmEIc6U
+    + Heiss, Ch 9
 
 
 ## Optional Topics
@@ -192,15 +201,19 @@ We will use different empirical topics in class to illustrate the concepts.
 
 1. Heteroskadasticity 
     + Wooldridge, Ch 8
+    + Heiss, Ch 8
 
 1. Basic Regression Analysis with Time Series Data
     + Wooldridge, Ch 10
+    + Heiss, Ch 10
     
 1. Serial Correlation and Heteroskedastiity in Time Series Regressions
     + Wooldridge, Ch 12
+    + Heiss, Ch 12
 
 1. Instrumental Variable Regression
     + Wooldridge, Ch 15
+    + Heiss, Ch 15
 
 
 # Other Rules
