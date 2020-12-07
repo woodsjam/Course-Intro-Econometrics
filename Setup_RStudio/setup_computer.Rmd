@@ -1,0 +1,85 @@
+---
+title: "Setup Software for EC469/569"
+output:
+  html_document:
+    df_print: paged
+---
+
+__R__ is our main computation engine.  It is open source and freely available. You can do a lot of statistics with R and can call some of the other common languages and libraries used for statistics and machine learning from R.  __RStudio__ is an integrated development environment (IDE), that makes it a lot easier to use R and install the libraries you will use in class.  We will use this in class.  There are other choices but this is the one most suited to the class.  __git__ is some version control software that works behind the scenes to keep track of changes you make on files.  You can get very sophisticated using git but we will be using it only to make sure some custom R libraries we use in the class are updated.
+
+# Start Up A Computer
+
+These directions assume that you don't have a computer and will be using the remote desktop (https://rdweb.wvd.microsoft.com/webclient/index.html).  If you go to that link and log in with your PSU username, the @pdx.edu name, and your PSU credentials, you will have access to a full windows machine through a browser.
+
+Click on the computer lab tab and you should be able to use this as a Windows 10 machine within your browser without installing anything. 
+
+Both R and RStudio come installed on this machine. If you are setting this up on your own computer, you will have to install both pieces of software, otherwise skip to the `Install Git` section below.  
+
+## If on your own computer, install R and RStudio
+
+Both R and RStudio desktop are available for free.  Don't try to purchase anything.
+
+First install R at https://cran.rstudio.com/.  There are links there for installing on Linux, OSX and Windows.  Just follow the directions according to your operating system.
+
+Then go to https://rstudio.com/products/rstudio/ and install the Open Source Edition of RStudio Desktop.  This is the free version of the software.
+
+## Install Git
+
+git is a distributed version control system.  That is a fancy way of saying it allows a lot of people to work on some complex coding projects without stepping on each others feet.
+
+Open a browser and go to https://git-scm.com/.  Please note that if you are working on the remote desktop you need to open a web browser on that desktop, not an extra tab on the browser you use to access the remote desktop.
+
+Download and install this software. It is pre-approved on PSU machines, so you will not need admin privileges.  Once you are done restart RStudio.
+
+## Install Special Libraries in RStudio
+
+First we are going to update our libraries.  We are going to do this at the command line to keep it simple.  While in RStudio go to the bottom left pane.  There should be a few tabs there including one that says `Console`.
+
+Go to that tab and type:
+```
+update.packages()
+```
+
+This will update some existing libraries.  Just hit yes to everything. Next you are going to install a new library.  This library has a lot of functionality.  We will use it to make sure that the tools and functions you need for the class are installed with as little fuss as possible.
+
+Go to the same `Console` tab and type.
+
+```
+install.packages("installr")
+library(installr)
+install.Rtools()
+```
+
+This will install a few new libraries, actually packages but you don't need that distinction right now.  Close RStudio and start it again.  
+
+
+The final step is to install the course library.  This is purpose built for this class and will install all the libraries you need for the class and a few helper functions to get through the assignments.  Once again, go to the console window and type:
+
+```
+library(devtools)
+install_github("woodsjam/PSUEC469")
+```
+
+
+That library will install some of the packages that you need.  Much of your homework and in-class work will depend on that package.  Many of our scripts will start with `library("PSUEC469")` to make sure we have the correct libraries loaded.
+
+# Maintance
+
+Periodically you will need to update the libraries and update the course library PSUEC469.
+
+To update the general libraries first clear the workspace with Session:Clear Workspace.  Then you should restart R with Session:Restart R.
+
+Then update the regular packages with:
+
+```
+update.packages()
+
+```
+
+To update the course library type:
+
+```
+library(devtools)
+install_github("woodsjam/PSUEC469")
+```
+New packages may be installed and new functions may be defined to help us out with homework, class work and exams. We will do this about weekly.

@@ -49,7 +49,7 @@ There are two primary textbooks for the course.  The main textbook for econometr
 
 The major supplement is Heiss, Florian Using R for Introductory Econometrics, ed 2.  Hard copies are available for purchase but the book can be read online http://www.urfie.net/read/index.html.  This will help out implementing econometrics in R that you learn in Wooldridge text.
 
-This is intended to be a cost savings for student.  The 7th edition of Wooldridge may be rented for $176 with material similar to the Heiss supplement and online homework. 
+This flexibility  is intended to be a cost savings for student.  The most recent, 7th, edition of Wooldridge may be rented for $176 with material similar to the Heiss supplement and online homework. Earlier editions are much more reasonable.
 
 
 # Proficiency-Based Course
@@ -142,11 +142,11 @@ I am enthusiastic about helping students that take their education seriously and
 
 # Topics and Readings
 
-References to Wooldridge generally refer to the 5th edition of the book.  
+References to Wooldridge generally refer to the 5th edition of the book and will be the focus of the quizzes in d2l and the majority of the technical information.  Heiss refers to the R oriented companion book and has great examples of how to implement the ideas learned in Wooldridge.
 
-I am also supplementing the book with videos made by UO's Mark Thoma for his EC320 course, which is the rough equivalent of this course.  He will make a few references to the structure of his course, which is different than ours, the software they use, EViews, we will be using R and RStudio, and a different textbook. You can ignore these differences. The math, concepts and approaches apply to all courses at this level.  Please note that the chapter titles in the videos don't line up our textbook.
+I am also supplementing the book with videos made by UO's Mark Thoma for his EC320 course, which is the rough equivalent of this course.  He will make a few references to the structure of his course, which is different than ours, the software they use, EViews, we will be using R and RStudio, and a different textbook. You can ignore these differences. The math, concepts and approaches apply to all courses at this level.  Please note that the chapter titles in the videos don't line up our textbook. We will use different empirical topics in class to illustrate the concepts.
 
-We will use different empirical topics in class to illustrate the concepts.
+
 
 ## Core Topics
 
@@ -187,7 +187,7 @@ We will use different empirical topics in class to illustrate the concepts.
     + Thoma Nonlinearities https://youtu.be/JlmWX7hWMw8
     + Thoma More Nonlinearities https://youtu.be/jROGZHBzz6c
     + Thoma With Dummy Variables https://youtu.be/jROGZHBzz6c
-    +  Heiss, Ch 6
+    + Heiss, Ch 6
     + Heiss, Ch 7
 
 1. Specification and Data Issues
