@@ -171,7 +171,7 @@ I am also supplementing the book with videos made by UO's Mark Thoma for his EC3
     + Heiss, Ch 19 (Select Parts)
 
 1. Statistical Review
-    + Wooldridge, Appendix B
+    + Wooldridge, Appendix A, B, and C
     + Thoma Part 1 Statistical Review https://youtu.be/e2JKX2hrTyE
     + Thoma Part 2 Statistical Review https://youtu.be/OVw_925mGWY
     + Heiss, Ch 1.6 - 1.10
