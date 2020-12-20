@@ -19,21 +19,17 @@ Econometrics is the glue that connects what you learned in your theory classes a
 
 Besides learning the theoretical foundations of econometrics we will also work on the practical nuts and bolts of working in teams to create credible, replicable analysis with a modern tool set that include R, RStudio, Markdown and git.
 
-The course also comes with a warning.  When you are done with this course you will be overconfident in you ability to use regression as a tool.  
+The course also comes with a warning.  When you are done with this course you will be overconfident in your ability to use regression as a tool.  A little knowledge is a dangerous thing; drink deep.
 
 ## Prerequisites
 
 The course has a few prerequisites.  Ec 201 and Ec 202 will be removed as a prerequisite starting next year.  In much of the text we will be maximizing likelihood functions or minimizing least squares. Mth 251 is a necessity to understand these concept. Stat 243 and Stat 244 are required so that we can be sure you understand a few things about probability distributions, hypotheses tests and sampling.
 
-
-## Key Dates
-
 # Contact Information
 
-Communication will be handled through slack https://FILLIN.slack.com. You should have received an invitation, if not, just go to that URL and use your @pdx.edu email to sign up. There are reasonable help documents to get you started. https://get.slack.help/hc/en-us/articles/218080037-Getting-started-for-new-users
+Communication will be handled through slack https://psumetrics.slack.com/. You should have received an invitation, if not, just go to that URL and use your @pdx.edu email to sign up. There are reasonable help documents to get you started. https://get.slack.help/hc/en-us/articles/218080037-Getting-started-for-new-users
 
 Slack will be used for IM, email and forum style communication.  It even handles voice calls. If you have a question about course material or the course itself, ask in one of the channels, e.g., #general. If you have a personal message that is not intended for others, send a direct message, i.e., @woodsj. The group has global do not disturb hours of 10pm - 8am.  If you would like something different, alter your personal settings.
-
 
 Please note that I am not online all the time, and when I am online I will prioritize well-phrased questions with sufficient detail.  I tend to ignore general complaints, questions that can be answered by reading the syllabus or using the search bar.
 
@@ -42,6 +38,7 @@ Office Hours:
 + There are no in-person office hours this term.  We will use Zoom to meet face-to-face. 
 + Drop in office hours are Monday 3-4pm and Tuesday 10am-Noon through the last week of classes. I will keep a Zoom meeting up during this time.
 + You can schedule one-on-one meetings at https://woodsj.youcanbook.me/.
++ I tend to respond quickly in slack but have DnD hours set from 5pm till 7am.
 
 # Textbook and Other Resources
 
@@ -64,60 +61,78 @@ The homework assignments and quizzes for each module will be available for three
 Each module will include:
 
 + A series of readings and videos for you to review.  The readings will be from the textbooks and the videos will be a combination of videos that I have created and external videos.  This is intended to replace the one-to-many, sage-on-stage lectures, where there is little student interaction. 
-
-    + If you attend the Monday course meeting, please read the text and watch the videos before class.  Class time will not make much sense if you don't do the readings first
-    + The Monday meeting will be devoted to the current module(s).
     
+    + Monday meeting time will focus on the current module.
+    + Wednesday meetings will have time for previous modules.
 
-+ After you review the material you will complete a quiz in D2L. If the quiz performance is acceptable -- you may complete the homework  for that module.
++ After you review the material you will complete a quiz in D2L. If the quiz performance is acceptable -- you may complete the homework for that module.
 
     + These quizzes are timed and intended to take 20 to 30 minutes but will stop you from continuing after 60 minutes.
     + They will, most commonly, consist of multiple choice questions
-    + **Module quizzes must be completed by 5pm Wednesday**.
+    + **Module quizzes must be completed by 5pm Tuesday**.
     + The acceptable score will vary by quiz, but will be the same for all students.
     + If your quiz score is unacceptable, you will be able to take a similar quiz the next week.
-    + Quizzes will be available for three weeks
-
+    + Quizzes will be available for three weeks.
 
 + Once you pass
 
     + Homework assignments will generally be available by the Wednesday before the Monday they are due but may be up earlier.
     + You may take as much time as you like on homework assignments.
-    + The **homework assignments will be due Monday at 11:59 pm**.  This allows us to grade the assignment before the regularly scheduled quiz time on Wednesday.
-    + If your homework is not of acceptable quality, you will be able to complete another assignment the next week and if that is acceptable, you may take the quiz then.
+    + The **homework assignments will be due Monday at 11:59 pm**. 
+    + If your homework is not of acceptable quality, you will be able to complete another assignment the next week and if that is acceptable, you passed the module.
     + Acceptable performance is not point based but will be identical for all students.
     + Feedback on your answers will be given in D2L and will constitute the key.
 
 
+The regularly scheduled course time will be interactive and problem solving, focusing on getting you to use and understand the course material on a less superficial level. The Monday meeting will be devoted to the new module and the Wednesday meeting will be a mix of modules.
 
-The regularly scheduled course time will be interactive and problem solving, focusing on getting you to use and understand the course material on a less superficial level. The Monday meeting will be devoted to the new module and the Wednesday meeting will be a mix of the new module and the last two modules.
+## How This Provides Flexibility
+
+If you don't pass the module's homework and quiz the week the topic is introduced, you can take the quizzes and complete the homework the next week but there will also be new modules, or module, with their own homework assignments and quizzes to complete.  In fact, if you don't pass it twice, you can still redo the work in the third week.
+
+This means that if your homework and quiz performance is acceptable, for each module you will complete one quiz  on Tuesday and start on a homework due the following Monday.  If you get a week or two behind, you need to double or triple the your workload and will have to complete three quizzes and homeworks.
 
 
+## What Ifs
 
++ Q: What if I pass the quiz but can't pass the homework?  A: Then you didn't pass the module.  There is no partial module credit for turning an acceptable homework assignment.
++ Q: What if I get sick? A: It depends on how severe it is.  If it is something mild, less than two weeks, you can catch up on the material in the third week.  If it is severe, longer than two weeks, you can make a deadline appeal https://www.pdx.edu/registration/DAC.  You must send documentation, but it removes the course from your transcript and gets you your money back.
 
 
 ## P/NP Grades 
 
-PSU's policy on how P/NP grades will be used during the COVID-19 pandemic is in flux.  For Fall term, P/NP grades will count as letter grades for satisfying major and degree requirements.  
+PSU's policy on how P/NP grades will be used during the COVID-19 pandemic is in flux.  For Winter term, P/NP grades will count as letter grades for satisfying major and degree requirements.  
 
 Most faculty expect there to be an asterisk on pandemic period grades, but we can't guarantee how they will be perceived outside PSU.
 
-
 Please consult your funder for potential financial implications of switching to P/NP.  Not all scholarships will fund P/NP courses, and the VA may ask for a return of tuition, fees and associated BAH payments if the student does not pass the course.
 
+## Assessments and Grade Policy
 
-## Assignments
+Your grade in the class is determined by the number of modules you acceptably complete. Each module roughly corresponds to a chapter and there are a minimum of 7 modules. To acceptably complete a module you must turn in an acceptable homework assignment and complete a quiz at an acceptable level.  
 
-## Planning for COVID-19 Flexibility
+Here are the required number of successfully completed modules required for each grade:
 
++ A: 6 Modules 
++ B:  5  Modules
++ C:  4  Modules
++ P:  4  Modules
++ D:  3  Modules
+
+
+
+# Planning for COVID-19 Flexibility
 
 There is a good chance that some of us will get sick. The [symptoms](https://www.cdc.gov/coronavirus/2019-ncov/symptoms-testing/symptoms.html) are generally known and the effects are anything between minor and major, temporary and permanent, and death.
 
 I can't plan for every contingency and, as of writing this, PSU has not given much in the way of guidance. Here is my proposed plan for illness that lasts for less than and more than two weeks for both students and faculty.
 
 
-### Student is Ill for _Less_ than Two Weeks
-### Student is Ill for _More_ than Two Weeks
+## Student is Ill for _Less_ than Two Weeks
+
+This is why the class is modular and proficiency based.  If you are down one week and don't compete the current quiz or homework, you can put it off till the next week provided the module was not introduced more than two weeks ago.
+
+## Student is Ill for _More_ than Two Weeks
 
 This means you have missed more than 20% of the class.  That is hard to make up.  What you should do at this point is file a deadline appeal.  You do that online at https://www.pdx.edu/registration/DAC.
 
@@ -126,7 +141,7 @@ Fill out the electronic form saying that you were sick and attach documentation 
 Please contact financial aid and your scholarship funder to talk about financial implications.  The rules are likely to be in flux.
 
 
-### Jamie is Ill
+## Jamie is Ill
 
 Here is where there is less certainty and less flexibility.  We don't really have the ability to have backup for all our courses. There is no backup for this class.
 
@@ -134,7 +149,7 @@ I will make an announcement if I can't make it to our regular meeting time. In t
 
 If my illness extends beyond two absences, I will contact the chair of the department and work out what to do.  PSU has not done any contingency planning for faculty illness, incapacitation, hospitalization or death.  Sorry about not having details.
 
-### An Appeal
+## An Appeal
 
 All this flexibility comes at a cost to me.  I'm keeping large chunks of my calendar open for one-on-one meetings. 
 
@@ -142,10 +157,9 @@ I am enthusiastic about helping students that take their education seriously and
 
 # Topics and Readings
 
-References to Wooldridge generally refer to the 5th edition of the book and will be the focus of the quizzes in d2l and the majority of the technical information.  Heiss refers to the R oriented companion book and has great examples of how to implement the ideas learned in Wooldridge.
+References to Wooldridge generally refer to the 5th edition of the book and will be the focus of the quizzes in D2L and the majority of the technical information.  Heiss refers to the R oriented companion book and has great examples of how to implement the ideas learned in Wooldridge.
 
 I am also supplementing the book with videos made by UO's Mark Thoma for his EC320 course, which is the rough equivalent of this course.  He will make a few references to the structure of his course, which is different than ours, the software they use, EViews, we will be using R and RStudio, and a different textbook. You can ignore these differences. The math, concepts and approaches apply to all courses at this level.  Please note that the chapter titles in the videos don't line up our textbook. We will use different empirical topics in class to illustrate the concepts.
-
 
 
 ## Core Topics
@@ -166,7 +180,7 @@ I am also supplementing the book with videos made by UO's Mark Thoma for his EC3
     + Wooldridge, Ch 2.
     + Thoma Part 1 Simple Regression https://youtu.be/Y7z6HyVeGj4
     + Thoma Part 2 Simple Regression https://youtu.be/uZDzw_qb6xo
-    + Thoma Hypothosis Testing https://youtu.be/nLQt0fygyoc
+    + Thoma Hypothesis Testing https://youtu.be/nLQt0fygyoc
     + Heiss, Ch 2
     
 1. Multiple Regression Analysis: Estimation
@@ -207,7 +221,7 @@ I am also supplementing the book with videos made by UO's Mark Thoma for his EC3
     + Wooldridge, Ch 10
     + Heiss, Ch 10
     
-1. Serial Correlation and Heteroskedastiity in Time Series Regressions
+1. Serial Correlation and Heteroscedasticity in Time Series Regressions
     + Wooldridge, Ch 12
     + Heiss, Ch 12
 
