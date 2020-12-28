@@ -1,8 +1,13 @@
 ---
 title: "Syllabus EC469/569 Winter 2021"
 author: "James Woods"
-date: ""
-output: pdf_document
+date: ''
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document:
+    reference_docx: template.docx
 fontsize: 12pt
 ---
 
@@ -113,7 +118,7 @@ Your grade in the class is determined by the number of modules you acceptably co
 
 Here are the required number of successfully completed modules required for each grade:
 
-+ A: 6 Modules 
++ A:  6 Modules 
 + B:  5  Modules
 + C:  4  Modules
 + P:  4  Modules
@@ -233,7 +238,7 @@ I am also supplementing the book with videos made by UO's Mark Thoma for his EC3
 # Other Rules
 
 
-+ When completing online quizzes or other assignments, you may use your book, wiki, calculator, spreadsheets, notes, or other resources as long as it is not another student or person.  *The work must be authentically and genuinely your own. In other words, if you are copying answers you found online, it is not your work.*
++ When completing online quizzes or other assignments, you may use your book, wiki, calculator, spreadsheets, notes, or other resources as long as it is not another student or person or a key posted online.  *The work must be authentically and genuinely your own. In other words, if you are copying answers you found online, it is not your work.* Course Hero is not your hero.  It is a short-term solution that harms you in the long-term.
 
 + In this classroom, we support and value diversity.  To do so requires that we:
 

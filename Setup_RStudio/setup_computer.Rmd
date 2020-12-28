@@ -69,17 +69,10 @@ Periodically you will need to update the libraries and update the course library
 
 To update the general libraries first clear the workspace with Session:Clear Workspace.  Then you should restart R with Session:Restart R.
 
-Then update the regular packages with:
+Then update the packages with:
 
 ```
 update.packages()
 
-```
-
-To update the course library type:
-
-```
-library(devtools)
-install_github("woodsjam/PSUEC469")
 ```
 New packages may be installed and new functions may be defined to help us out with homework, class work and exams. We will do this about weekly.

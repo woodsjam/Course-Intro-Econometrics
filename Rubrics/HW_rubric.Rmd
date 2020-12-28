@@ -1,0 +1,33 @@
+---
+title: "Homework Rubric"
+output: pdf_document
+---
+
+1. 
+  1. Excellent:
+  1. Good:
+  1. Fair:
+  1. Poor:
+  
+
+1. Code execution: We run your Rmd.
+  1. Excellent: Runs with no errors
+  1. Good:
+  1. Fair: Runs with minor (easily fixed) errors
+  1. Poor:  Does not execute
+1. Code Output: We look at your file and see if you used R correctly
+  1. Excellent:  Correct techniques used for question
+  1. Good: Minor errors and omissions of requested output
+  1. Fair: Multiple errors and omissions of requested output
+  1. Poor: Incorrect
+1. Code Documentation:  You must be clear with comments about what your R code does.
+  1. Excellent: Well documented logic.
+  1. Good: Minor logical errors/omissions.
+  1. Fair: Significant logical errors/omissions.
+  1. Poor: 
+
+1. Mathematical Responses:  We look at steps in mathematical questions
+  1. Excellent:
+  1. Good:
+  1. Fair:
+  1. Poor:

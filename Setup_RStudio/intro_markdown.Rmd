@@ -1,0 +1,108 @@
+---
+title: "Getting Started In R for EC469/569"
+output: html_document
+author: "Bob"
+---
+
+This is a *RMarkdown* document.  It allows you to put code and words in the same document.  Basically all our data manipulation and analysis can be done in one place without cutting and pasting between this document in one program and another document in yet another.
+
+To see what this looks like press the Knit button at the top of the document.
+
+Most of the homework will be documents like this that you will turn in via D2L.
+
+At the top of the document is a header. It is pretty simple right now, having only a title, output type and author.  We will add more to this later but right now just *change the name from "Bob" to your name*.
+
+You can break your documents up into sections with # signs.  This is oriented as coding rather than point and click, which is very hard to replicate and validate.
+
+# Top Level Header
+
+## Second Level Header Part 1
+
+## Second Level Header Part 2
+
+*Add another second level heading and a third level heading.*
+
+The more # signs the lower the level in the outline.  You should also notice a small outline just to the right in the text in the RStudio window.
+
+Markdown also handles lists.  You indicate this with either a + or a *.  They can be mixed and matched and if you tab twice you can change the level.
+
++ Cheese
+* Milk
++ Bucket
+    + Why do I need a bucket?
+    + Don't ask.  This is an example
+    
+They can also be numbered.  Just use a 1. and you will have a list that takes care of itself
+
+1. Patty cake
+1. Patty cake
+9. Bakers man
+8. Bake me a cake
+
+*Add a few items to each list.  Experiment with tabs.*
+
+You can see examples of lots of this on the [Rmarkdown Cheetsheet](https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)  By the way, that was an example of how to add a link. The square brackets are the text you see and the parentheses give the URL to where you go.
+
+
+*Create a link on your own to the PSU website.*
+
+Equations will be pretty important to us.  If you are a math major you will probably be using $\LaTeX$ for your homework.  We won't be using the full power of $\LaTeX$ but enough to keep things neat.
+
+To signal you are writing an equation or just using a few math symbols, just put the code between a pair of dollar signs like this $x^2 -5 = y$.  Algebraic things like squares are easy.  It can be a little complicated with other constructs.  $( \frac{1}{2} )$.  \frac{}{} indicates you are building a fraction.  
+
+We can set equations off by themselves with double dollar signs.
+
+$$E(X)= mu_X=\sum (x_i-P(x_i))$$
+You can even do multiple line equations like you are solving something step by step by adding two slashes \\\\ to the end of each line.  I had to put four slashes to get that to print since a slash indicates something special is next.
+
+$$
+y + 3 = 4x +2\\
+y = 4x -1
+$$
+
+There are plenty of [LaTeX sheet sheets](https://www.google.com/search?safe=off&rlz=1C1GCEB_enUS917US917&sxsrf=ALeKk00rsPaMJxojmjOnPM4CMaeYZvBZcQ%3A1607629330462&ei=EnrSX_rWG9KE-gTOmILAAQ&q=latex+cheetsheet&oq=latex+cheetsheet&gs_lcp=CgZwc3ktYWIQAzIHCCMQsQIQJzIKCCMQsQIQyQMQJzIECAAQCjIECAAQCjIECAAQCjIECAAQCjIECAAQCjIECAAQCjoECAAQRzoHCCMQsAIQJzoHCAAQyQMQDToECAAQDToGCAAQFhAeUKHQElip0xJgjtwSaABwAXgAgAFgiAGwAZIBATKYAQCgAQGqAQdnd3Mtd2l6yAEIwAEB&sclient=psy-ab&ved=0ahUKEwj6p7D5lcTtAhVSgp4KHU6MABgQ4dUDCA0&uact=5) on the web to help you out.
+
+In the mean time, solve this system of supply and demand equations showing your steps.
+
+$$
+P = -10 + 2 q\\
+P = 30 - 3 q
+$$
+
+# But What About Text and Code At the Same Time?
+
+There are two basic ways of doing this, chunks and in-lines.
+
+You can call R from inside a document to do some work and then show the results.  For example suppose I wanted to report the sum of 235 and 432.  I could then just  put the sum between some \` with the indication that I want to use r.  The sum is `r 235 + 432`. You can also get at python and other languages.
+
+Please note that you don't use LaTeX symbols.  This is an all R operation.  You can also do more complex, multi-step things.  This one assigns a value to a variable, x, then cubes it and takes the square root.  Each operation is separated by a semi-colon. `r x<-3; x<-x^3; sqrt(x)`  Only the last operation shows because it is the only one that shows a result.
+
+The other way to to call R within an RMarkdown document is through chunks.  You can get these by either ctrl+alt+i or insert R at the top of the text window in RStudio.  The one I created below is named Fred and will show up in the outline on the right.
+
+```{r Fred}
+rm(x,y)   # clears x and Y
+x <- 1000 #assigns x the value of 100
+x^2       # squares x but does not store it.
+sqrt(x)   # gives square root of x but does not store it
+y <- x    # copies x to y
+```
+
+Chunks can produce a variety of different types of output, tables and graphics, but we will focus right now on what you can see.
+
+Notice you created two variables x and y.  You can get at those values with the inline function. So, x = `r x`.
+
+You can modify if the chunk is displayed or run by changing a few options.  You can either type the options or use the gear at the top of the chunk.
+
+*Create a few chunks and see what shows*.  You can give them names like Fred but it is not required.  Don't give two chunks the same name.
+
++ {r Alice, echo=FALSE}
++ {r Charlie, echo=TRUE}
++ {r Mo, include=FALSE}
++ {r KPL, eval=FALSE, include=FALSE}
+
+*See if you can figure out what the  echo and include options do.*  You can make this easier on yourself if each chunk has a different number for x <- 1000.  And you check the value of x with  between chunks to see what changed.
+
+
+We will add some extra arguments to the chunks to display things, like tables and figures, the way we like, but that will be later.  In the mean time, enjoy this picture of some dogs as an example of how to add a picture.
+
+![](20190607_160016.jpg)

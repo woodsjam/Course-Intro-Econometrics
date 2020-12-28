@@ -1,0 +1,119 @@
+---
+title: "Statistical and Math Review"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+runtime: shiny    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(PSUEC469) # Other libraries may be required.
+
+
+set.seed(458) # make random results reproducible
+
+```
+
+# Summation Operator
+
+Property 1
+
+$$\sum_{i=1}^{n}c = nc$$
+Property 2
+$$\sum_{i=1}^{n}cx_i = c\sum_{i=1}^{n}x_i$$
+Property 3
+$$\sum_{i=1}^{n} (ax_i + b y_i) = a\sum_{i=1}^{n}x_i+ b\sum_{i=1}^{n}y_i$$
+
+## Questions
+
+- What is $\sum_{m=1}^{4} 8k -6m$?
+
+$$\sum_{m=1}^{4} 8k -6m = \\$$
+
+- Summation notation for $0 + .25 + .5 + .75$
+
+
+
+- If the mean is $\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i$ what is $\frac{1}{n} \sum_{i=1}^n (2x_i - \bar{x})$?
+
+$$\frac{1}{n} \sum_{i=1}^n (2x_i - \bar{x}) = \\$$
+
+
+
+- If the variance is defined as $\frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})^2$ what is the variance of 2x?
+
+#  Logs
+
+We will spend a lot of time in this class with the equations that are linear in the parameters but that can include polynomials, logs and other transformations like that.
+
+A function that is linear in the parameters are additively separable where the parameters are just multiplied by some function of other variables but no other parameters.
+
+These are all linear in the parameters:
+
++ $y = \beta_1 + \beta_2 x_1 + \beta_3 x_2$
++ $y = \beta_1 + \beta_2 x^2 + \beta_3 x^3$
++ $y = \beta_1 + \beta_2 \ln(x_1) + \beta_3 x_2$
++ $y = \beta_1 + \beta_2 x_1 + \beta_3 x_2x_1$
+
+These are not:
+
++ $y = \frac{\beta_1}{\beta_2} +  \beta_1 x_1 + \beta_2 x_2$
++ $y = \beta_1 \beta_2 x_1 + \beta_1 x_2 + \beta_2 x_1$
++ $y = \beta_1 + x_1^{\beta_2}  + \beta_3 x_2$
+
+We will often transform equations, by taking the natural log, which we just call the log, or square root to turn them into linear equations.
+
+
+Logarithm rules:
+
++ $\ln{x y} = \ln{x} + \ln{y}$
++ $\ln{\frac{x}{y}} = \ln{x} - \ln{y}$
++ $\ln{x^y} = y\ln{x}$
++ $f(x) = \ln{x} \Rightarrow f'(x) = \frac{1}{x}$
++ $\lim_{x \rightarrow 0^+} = -\infty $
++ $\ln(1)=0$
++ Undefined at zero and complex valued when less than zero, $\ln(-1) = i\pi$.  We don't use complex values in this class.
+
+Our equations will generally be polynomials and we will often be interested in the _marginal effects_ of a change in some variable.  This generally means taking the derivative with respect to that variable. I will keep things down to some simple cases but you should review these basic derivatives and the chain rule. I will use both the Lagrange, $f'$, and Leibniz, $\frac{d}{dx}$, notation interchangibly.
+
++ $\frac{d}{dx} C = 0$
++ $\frac{d}{dx} x^2 = 2 x$
++ $\frac{d}{dx} x^n = n x^{n-1}$
++ $\frac{d}{dx} e^x = e^x$
++ $\frac{d}{dx} e^{kx} = ke^{kx}$
++ $\frac{d}{dx} \ln{x} = \frac{1}{x}$
++ Chain rule $\frac{dz}{dx} = \frac{dz}{dy} \frac{dy}{dx}$
+
+
+## Questions
+
+- $\ln(y) = \beta_1 z_1 + \beta z_2^2$ Is this linear in the parameters? Can it be linearized with a ln transform? If so, show.
+
+- $y = \beta_1\beta_2x^{\beta_3}$ Is this linear in the parameters? Can it be linearized with a ln transform?  If so, show.
+
+
+- Given $Income = 10 + .5 ~experience - .1 ~experince^2$, which explains income with years of experience, what is the marginal effect of a year of experience? 
+
+- Given $Income = 10 + .5 ~experience - .1 ~experince^2$, which explains income with years of experience, when will income be maximized? 
+
+- Given a demand function, $Q = e^{-5p} + 4$ what is the marginal effect of price changes?
+
+- Given a demand function, $Q = e^{-5p} + 4$ at what price will people stop buying the good?
+
+- Given a demand function, $Q = e^{p^2-5p} + 4$ what is the marginal effect of price changes?
+
+# Probability Discrete and Continuous
+
+
+```{r}
+
+library(MASS)
+
+Sigma <- matrix(c(10,3,3,2), 2,2)
+mvrnorm(n = 20 , mu = c(.5, .5), Sigma )
+
+```
+
