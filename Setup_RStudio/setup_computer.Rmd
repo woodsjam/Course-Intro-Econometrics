@@ -9,7 +9,7 @@ __R__ is our main computation engine.  It is open source and freely available. Y
 
 # Start Up A Computer
 
-These directions assume that you don't have a computer and will be using the remote desktop (https://rdweb.wvd.microsoft.com/webclient/index.html).  If you go to that link and log in with your PSU username, the @pdx.edu name, and your PSU credentials, you will have access to a full windows machine through a browser.
+These directions assume that you don't have a computer and will be using the remote desktop (http://vlab.pdx.edu/).  If you go to that link and log in with your PSU username, the @pdx.edu name, and your PSU credentials, you will have access to a full windows machine through a browser.
 
 Click on the computer lab tab and you should be able to use this as a Windows 10 machine within your browser without installing anything. 
 

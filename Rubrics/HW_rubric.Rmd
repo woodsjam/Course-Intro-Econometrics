@@ -15,11 +15,13 @@ output: pdf_document
   1. Good:
   1. Fair: Runs with minor (easily fixed) errors
   1. Poor:  Does not execute
-1. Code Output: We look at your file and see if you used R correctly
+  
+1. Code Output: We look at your file and see if you used R to produce the correct output.
   1. Excellent:  Correct techniques used for question
   1. Good: Minor errors and omissions of requested output
   1. Fair: Multiple errors and omissions of requested output
   1. Poor: Incorrect
+  
 1. Code Documentation:  You must be clear with comments about what your R code does.
   1. Excellent: Well documented logic.
   1. Good: Minor logical errors/omissions.
@@ -31,3 +33,5 @@ output: pdf_document
   1. Good:
   1. Fair:
   1. Poor:
+  
+1. Written Explanation  

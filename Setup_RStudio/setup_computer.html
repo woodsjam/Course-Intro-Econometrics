@@ -1650,7 +1650,7 @@ summary {
 <p><strong>R</strong> is our main computation engine. It is open source and freely available. You can do a lot of statistics with R and can call some of the other common languages and libraries used for statistics and machine learning from R. <strong>RStudio</strong> is an integrated development environment (IDE), that makes it a lot easier to use R and install the libraries you will use in class. We will use this in class. There are other choices but this is the one most suited to the class. <strong>git</strong> is some version control software that works behind the scenes to keep track of changes you make on files. You can get very sophisticated using git but we will be using it only to make sure some custom R libraries we use in the class are updated.</p>
 <div id="start-up-a-computer" class="section level1">
 <h1>Start Up A Computer</h1>
-<p>These directions assume that you don’t have a computer and will be using the remote desktop (<a href="https://rdweb.wvd.microsoft.com/webclient/index.html" class="uri">https://rdweb.wvd.microsoft.com/webclient/index.html</a>). If you go to that link and log in with your PSU username, the <span class="citation">@pdx.edu</span> name, and your PSU credentials, you will have access to a full windows machine through a browser.</p>
+<p>These directions assume that you don’t have a computer and will be using the remote desktop (<a href="http://vlab.pdx.edu/" class="uri">http://vlab.pdx.edu/</a>). If you go to that link and log in with your PSU username, the <span class="citation">@pdx.edu</span> name, and your PSU credentials, you will have access to a full windows machine through a browser.</p>
 <p>Click on the computer lab tab and you should be able to use this as a Windows 10 machine within your browser without installing anything.</p>
 <p>Both R and RStudio come installed on this machine. If you are setting this up on your own computer, you will have to install both pieces of software, otherwise skip to the <code>Install Git</code> section below.</p>
 <div id="if-on-your-own-computer-install-r-and-rstudio" class="section level2">
@@ -1686,12 +1686,9 @@ install_github(&quot;woodsjam/PSUEC469&quot;)</code></pre>
 <h1>Maintance</h1>
 <p>Periodically you will need to update the libraries and update the course library PSUEC469.</p>
 <p>To update the general libraries first clear the workspace with <a href="Session:Clear" class="uri">Session:Clear</a> Workspace. Then you should restart R with <a href="Session:Restart" class="uri">Session:Restart</a> R.</p>
-<p>Then update the regular packages with:</p>
+<p>Then update the packages with:</p>
 <pre><code>update.packages()
 </code></pre>
-<p>To update the course library type:</p>
-<pre><code>library(devtools)
-install_github(&quot;woodsjam/PSUEC469&quot;)</code></pre>
 <p>New packages may be installed and new functions may be defined to help us out with homework, class work and exams. We will do this about weekly.</p>
 </div>
 
