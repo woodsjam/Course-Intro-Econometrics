@@ -1,6 +1,7 @@
 ---
 title: "Setup Software for EC469/569"
 output:
+  pdf_document: default  
   html_document:
     df_print: paged
 ---
