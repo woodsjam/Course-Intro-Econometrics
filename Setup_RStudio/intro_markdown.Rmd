@@ -103,6 +103,4 @@ You can modify if the chunk is displayed or run by changing a few options.  You 
 *See if you can figure out what the  echo and include options do.*  You can make this easier on yourself if each chunk has a different number for x <- 1000.  And you check the value of x with  between chunks to see what changed.
 
 
-We will add some extra arguments to the chunks to display things, like tables and figures, the way we like, but that will be later.  In the mean time, enjoy this picture of some dogs as an example of how to add a picture.
-
-![](20190607_160016.jpg)
+We will add some extra arguments to the chunks to display things, like tables and figures, the way we like, but that will be later. 

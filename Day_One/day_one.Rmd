@@ -1,0 +1,91 @@
+---
+title: "Day One EC 469"
+author: "Jamie Woods"
+date: ''
+output:
+  ioslides_presentation: default
+  beamer_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Agenda
+
++ Welcome back
++ Introductions
++ Syllabus Read Through.
++ Situating Econometrics
++ Set up tools for class
+
+# A Few Ground Rules
+
++ You don't have to have your camera on but get used to share screen while working on problems.
++ Microphones are great when you are speaking or in a small breakout room.
+    + Off when not speaking in the big room.
+    + On when speaking.
+    + On when in breakout rooms.
+    
+# Me?
+
+I'm in the partially finished basement.
+
++ A small heater at my feet on the concrete.
++ Scarf to keep warm.
++ A bunch of lights so I don't sprout mushrooms.
++ Dogs will bark
++ A baby will cry (My house is pandemic/furlough/unemployed crowded.)
+
+# Tech Me
+
++ You may see several Jamies in zoom.  One is the camera and the other is a tablet.
++ My computer has problems running zoom and a few other things at the same time.
+    + If I turn off the camera it is to save cycles/bandwidth
+
+# Lessons from Spring and Fall
+
++ Remote learning with zoom is about half as effective as normal
+    + Even when you break into small groups for discussion
+    + There are frictions
++ Lectures, one-to-many, sage-on-stage, with rare clarifying questions on the exact material as the reading, i.e., the usual
+    + Easy for me and ego gratifying.
+    + Easy for you to go off/off and start your exercise set.
+    + Less effective than reading or watching a video on your own.
++ Everything must be built to break or be delayed    
+    + About as useful as ...
+
+# Consequences
+
++ Grades are proficiency based.
++ Slides will be rare.  Mostly you will have a class document that is a mix of text and code that leads to some interesting notes.
+
+# Introductions
+
+# Read through Syllabus
+
+This link is in slack and I'll get it up in the zoom chat.
+
+https://drive.google.com/file/d/1GcPz6btMO7JgRy_U7-YlCHRCIVGI2N37/view?usp=sharing
+
+
++ Read it now and ask questions by inserting a comment, ctrl+alt+m or insert:comment.
++ We will take some time to do this.
+
+# Summary of Changes and Interpretations
+
+# Software Install
+
+Virtual computer lab (http://vlab.pdx.edu/)
+
++ Get logged in and get to the desktop.
++ If you have problems, let me know and screen share _just_ your browser.
+
+# Things to do.
+
+Learn some basic R on your own.
+
++ https://rstudio.cloud/learn/primers/1.2
++ https://rstudio.cloud/learn/primers/2.1
++ https://rstudio.cloud/learn/primers/2.2
++ https://rstudio.cloud/learn/primers/2.3
