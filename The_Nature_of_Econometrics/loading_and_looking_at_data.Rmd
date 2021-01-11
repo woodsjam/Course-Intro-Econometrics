@@ -1,0 +1,235 @@
+---
+title: "Loading and Looking at Data"
+author: "Jamie Woods"
+date: ""
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(devtools)
+
+install_github("woodsjam/PSUEC469", force=TRUE)
+
+library(PSUEC469)
+```
+
+# Goals
+
+
+## A Few Notes
+
+Always keep in mind that there is usually much more than one way of completing any one of these tasks.  Some tools will be better than others for specific tasks and some tools will simply work better with some of the other tools that you are using.  
+
+Suppose you may make an early decision to use tool A rather than B.  They both did just about the same thing.  You then may find out that because you used tool A, tool C is slightly easier to use than D, but if you used tool B first then D is easier to use.  Get used to these trade-offs.
+
+You should also start getting used to the idea that there is nothing new under the sun and if there is, you should make sure that it only new for a while.  This means if you find yourself copying and pasting something repeatedly, you should probably write a function that makes it easier.  It also means that you should get really good at googling solutions.  Most of the time you will end up at https://stackoverflow.com/  
+
+When you search for solutions try to include "CRAN" as a search term. CRAN is "The Comprehensive R Archive Network" and is where you download R.  Don't try using R as a search term.  The other big hint is to copy any error text and include that in your searches.  Someone probably had the same problem as you, asked a question about it, and then had an expert help them out with a solution.  Sometimes there is snark but mostly people are helpful.
+
+
+If you find you are missing any packages/libraries -- just install them through the packages tab or with `install.packages()`.
+
+# Loading Data
+
+Most of the time when you see data in class it is "clean".  That means anything odd, like flipping the first and second digit, has been identified and fixed.  All the variables are of the correct type, values that are intended to be numbers are numbers and not characters.  That kind of thing.  In real life about 80% of the time you will spend on a project is data wrangling.  We will skip a lot of this, but get used to the idea.
+
+## A Few Ways to Load Data
+
+Toy data is often built in to some packages.  For example `library(wooldridge)` contains a lot of data sets and you can load them pretty easily.
+
+```{r builtin_data}
+library(wooldridge)
+
+data('campus')
+
+```
+
+Check the upper right "Environment" tab for campus.  When you click it, the data will show in the console.  After the first click it will show up in a spreadsheet looking tab in this quadrant.
+
+You can also load in data files.  There is a strong preference among those that use data to load in CSV, comma separated value, files rather than excel or other proprietary format. You can look at CSV files in a text editor, but you can only look at an excel file in excel, or some other program that understands the format. 
+
+*Try the code below.  It reads in a file, but it doesn't save it anywhere.  Make a small change to save it to an object named `catholic`*
+
+```{r reading_csvs}
+
+library(readr)  # This is better than base r at reading files.
+
+read_csv("catholic.csv")
+
+```
+
+
+You can also pull in data from remote servers.  For example, the  alfred library , which you can install now with `install.packages("alfred")` give you the ability to pull in thousands of data series from the St. Luis Fed.
+
+```{r remote_data}
+
+library("alfred")
+
+UNRATE <- get_fred_series("UNRATE")
+```
+
+Again, keep in mind that the data you generally get in class is already cleaned and easy to use.  The real world provides dirty data that you will spend a lot of time working on before you can start to use you econometrics tools.
+
+# Looking at Tables
+
+Because two of the data frames, campus and catholic, are from the wooldridge library, you can find a brief description in the help window.  Try that out now.
+
+You can also click on the names in the environment tab or send the data to a tab to look at with some code.
+
+```{r send_to_tab}
+
+library(dplyr)  # Data wrangling tools.
+
+#Should be read as start with campus data and then View() it.
+
+campus %>%  # %>% is called a pipe.  You pronounce it as "and then"
+  View()
+
+```
+
+This class will only teach you how to deal with cross-sectional data.  
+
+Figure out which data are cross-sectional and `rm()` the others. Don't do this in the console.  Create a new chunk or code block below this paragraph and document what you did.  
+
+
+Get used to documenting your changes with code and writing notes to your future self, i.e., documentation.  
+
+Keep a tidy workspace.  Just like in a kitchen, working clean is working safe.  If you have time to lean, you have time to clean.
+
+
+# Summary Statistics
+
+R has a bunch of low-level built in functions to give you simple statistical summaries and you can build your own if you need to.  Many of them are built to work on one column of a data.frame or vector at a time.  Try `mean(campus)` it should bork^[In computers this predates Robert Bork.  See [Swedish Chef](https://youtu.be/sY_Yf4zz-yo) for details.] on you.  
+
+```{r}
+
+
+```
+You could do find the mean for each variable with something like mean(campus$enroll), but that is copypasta and violates the don't repeat yourslf principle ([DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)) 
+
+Base r includes `min`, `max`, `range`, `mean`, `median`, `quantile`, `sd`, `var`, but the easiest way to get most of this is with `summary`.
+
+```{r base_summary}
+
+summary(campus)
+
+```
+
+
+Lets figure out how to do this more flexibly.  Try googling "dplyr mean each column".  Your top two hits should be in the tidyverse or stackoverflow.  Go to the tidyverse and scan down till you find "Why do we like across()" and try to modify it to just give you the mean.
+
+```{r mean_dplyr_style}
+
+
+
+```
+
+
+
+If this all seems like a lot of work for something ordinary and that someone must of had to do this before.  You are right.  Try installing "gtsummary".
+
+```{r}
+library(gtsummary)
+
+campus %>%
+  tbl_summary(statistic = list(all_continuous() ~ "{mean} ({sd})",
+                     all_categorical() ~ "{n} / {N} ({p}%)"),)
+```
+
+There are a bunch of packages that do similar things.  We tend to use `stargazer` when we are working on papers.
+
+## Things to do next
+
+dplyr is just really useful for handling data.  While it can be a little slower than base r and some optimized code, it is a lot easier to read.
+
+At your own pace, look at some of the dplyr help below.
+
++ The basics of dplyr https://rstudio.cloud/learn/primers/2
++ The more advanced material https://rstudio.cloud/learn/primers/4
+
+# Basic Visualizations
+
+Your brain is one of the most well developed pattern recognition devices that has ever been developed.  Use it, but be aware your visual processing can get fooled by ink noise, overplotting and a bunch of graphical artifacts.  
+
+Plotting data also gives you that quick peek to spot outliers, rough functional form, problems with bimodal distributions and odd things that are not always captured in the summary statistics.
+
+Here are some quick basics for scatter plots, and histograms.
+
+The fastest way to get an overview is to look at all the data at once.  Install GGally on your own and then try the code below.
+
+```{r}
+library(GGally)
+
+campus %>%
+  ggpairs() 
+
+```
+
+The tool will take care of categorical data too.  Something we will care about later.
+
+You should see:
+
++ In the upper right triangle the pairwise correlations between the variables.  Note that these describe linear relationships and some of the relationships are non-linear.
++ The diagonal shows a smoothed version of the histogram for each variable.
++ priv, which is a dummy variable indicator should look odd.  It is coded as a 1/0.  We will deal with this  kind of problem later in the course.
++ The lower triangle are scatter plots of one variable vs the others.
+
+Now work through this:
+
++  See lcrime and crime? One is a log transform of the other, but the correlation coefficient is .777.  Why?
++ See lcrime and lpolice? Part of you wants to say something causal, "Crime causes more police.", or "Police cause more crime.", but we can't get at cause with purely observational data.  We did not give a 100 extra police to randomly drawn schools and we did not do any fancy quasi-experimental techniques.   
+
+
+Lets take a look at that last relationship.  I will make the private schools a different color than the public schools and I will draw a line through the cloud.  Basically, the line is what we are learning how to use.
+
+
+```{r}
+
+library(ggplot2)
+
+campus %>%
+  ggplot(aes(y = lcrime, x = lpolice, colour = as.factor(priv))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
+
+Keep in mind that we can kind of say that crime in private schools has a different response to to police.  We can actually test this hypothesis.  The problem is that the choice of how large a police force you want is determined by a host of other factors:
+
++ Budget status
++ Socioeconomic status of students
++ Crime rates in surrounding areas.
++ Response rates of local police
++ Volume of school specific offenses.
++ etc.
+
+Some of these are also correlated with a school being either private or public.  It is that correlation that causes problems in describing this relationship as causal.
+
+
+*Try making a similar diagram between enrollment and crime*
+
+
+Boxplots are another exploratory technique. ggpairs will do this for you.  Boxplots are useful if you want to get an idea of the variance of the data and if the medians are different depending on a factor.
+
+The figure below looks at enrollment and helps sort out if the median enrollment in private schools are different than public schools.  If the notches overlap, then you can't reject the hypothesis that the medians are the same.
+
+```{r}
+
+campus %>%
+  ggplot(aes(y = enroll, x = as.factor(priv))) +
+  geom_boxplot(notch = TRUE)
+```
+
+*Try to do something similar with crime.*
+
+You can also get similar information, but not the visual hypothesis tests with histograms.
+
+```{r}
+
+campus %>%
+  ggplot(aes(x = enroll)) +
+  geom_histogram(aes(color = as.factor(priv), fill = as.factor(priv) ))
+```
+

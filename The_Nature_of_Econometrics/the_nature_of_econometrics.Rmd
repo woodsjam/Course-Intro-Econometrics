@@ -1,0 +1,92 @@
+---
+title: "The Nature of Econometrics"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+runtime: shiny    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(PSUEC469) # Other libraries may be required.
+
+
+set.seed(PSUID) # make random results reproducible
+
+```
+
+
+Some of this is cribbed from a very good supplemental book, Mastering Metrics https://www.masteringmetrics.com/ the rest is from the Wooldridge text.
+
+Econometrics is one of the tools that economists use to connect theory, the things you learn in EC 311/415/312 and the real world.  I want to be very clear, regression analysis, is one tool that will help you get that connection.  
+
+What makes econometrics difficult is that we are not trying to find simple correlations we are trying to make a case that one thing causes another and once we know that one thing causes another we hope to control an effect with our newly found cause.
+
+Many techniques you will find in other classes, are focusing on forecasting, which is a much easier task.
+
+# What is the Ideal?
+
+The ideal for sorting out cause and effect is an experiment with randomization.  Start with a large number of individuals that are not particularly unusual.  Use a random number generator and assign a treatment to each individual.
+
+So if you want to find the effect of smoking cigarettes on the time it takes to compete a 400M run. You choose some levels of cigarettes to smoke, say zero, five, ten and twenty.  Then you randomly assign each of the individuals to one of these treatment groups.  
+
+Then you sit them down and make them smoke the cigarettes.  They can't opt out.  They can't stop at 1 when they were assigned to smoke twenty.  They can't quit in the middle of the experiment.  
+
+Once that is done, you time their 400M runs and do a simple t-test of the differences between the groups and if your randomization did accidentally create odd groups, like all the highly trained runners in the group that smokes ten cigarettes, you can find the average treatment effect by looking at the difference between the average time for those that smoked no cigarettes and each of the other groups.
+
+This is a kind of randomized control trial and is considered to be the gold standard for cause and effect -- with a few caveats. 
+
+If it is so great, why not do this all the time?
+
+Often time random assignment is unethical or very expensive or just impossible. We often have non-experimental observational data.
+
+# Apples to Apples and Simpson
+
++ Civil rights act
++ Simpson's paradox everywhere.
+
+## Regression Helps us Give Apples to Apples comparisons
+
+# But What If I Don't Want to?: Self-selection and Endogenaity
+
+## Pure Stats Solution is IV, an optional topic
+
+## Quasi-experimental methods for the rest
+
+# Connecting Data to Economic Theory
+
+Pick something simple, a Cobb-Douglas utility function:
+
+$$u(x,y) = \beta \log x + (1 - \beta) \log y$$
+
+Make things a little easier by having income, $M$, and the price of good x be expressed in terms of good y. So the income constraint is:
+
+$$M = p x + y$$
+
+Questions:
+
+1. Have you seen this before?
+
+
+1. What is the the demand for x?  If you are looking for a hint solve the budget constraint for y and insert into the utility function and maximize.
+
+$$ \beta \log x + (1 - \beta) \log(M - px)$$
+
+If we have observations of prices and the purchases of x, y and income for individuals at one point in time, we can infer the $\beta$ how much they prefer good x to y -- assuming they all have the same preferences and those identical preferences are of this particular form.
+
+We don't always make the connections so explicit.
+
+# Kinds of data
+
+## Cross-sectional
+
+
+## Time-series
+
+## Pooled Cross-section
+
+## Panel or Longitudinal
+
+## Warnings about infering Causality from a regression
