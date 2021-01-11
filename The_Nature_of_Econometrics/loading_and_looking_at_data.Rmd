@@ -130,7 +130,7 @@ Lets figure out how to do this more flexibly.  Try googling "dplyr mean each col
 
 If this all seems like a lot of work for something ordinary and that someone must of had to do this before.  You are right.  Try installing "gtsummary".
 
-```{r}
+```{r easy_summary_statistics}
 library(gtsummary)
 
 campus %>%
@@ -159,7 +159,7 @@ Here are some quick basics for scatter plots, and histograms.
 
 The fastest way to get an overview is to look at all the data at once.  Install GGally on your own and then try the code below.
 
-```{r}
+```{r ggpairs_demo}
 library(GGally)
 
 campus %>%
@@ -185,7 +185,7 @@ Now work through this:
 Lets take a look at that last relationship.  I will make the private schools a different color than the public schools and I will draw a line through the cloud.  Basically, the line is what we are learning how to use.
 
 
-```{r}
+```{r scatter_demo}
 
 library(ggplot2)
 
@@ -215,7 +215,7 @@ Boxplots are another exploratory technique. ggpairs will do this for you.  Boxpl
 
 The figure below looks at enrollment and helps sort out if the median enrollment in private schools are different than public schools.  If the notches overlap, then you can't reject the hypothesis that the medians are the same.
 
-```{r}
+```{r box_demo}
 
 campus %>%
   ggplot(aes(y = enroll, x = as.factor(priv))) +
@@ -226,10 +226,16 @@ campus %>%
 
 You can also get similar information, but not the visual hypothesis tests with histograms.
 
-```{r}
+```{r hist_demo}
 
 campus %>%
   ggplot(aes(x = enroll)) +
   geom_histogram(aes(color = as.factor(priv), fill = as.factor(priv) ))
 ```
 
+
+## Things to do next
+
+ggplot2 is just really useful for visualizing data.  
+
+At your own pace, look at some of the ggplot2 help below.  There are some great tutorials at https://rstudio.cloud/learn/primers/3
