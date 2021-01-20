@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(devtools)
 
-install_github("woodsjam/PSUEC469", force=TRUE)
+#install_github("woodsjam/PSUEC469", force=TRUE)
 
 library(PSUEC469)
 ```
@@ -56,7 +56,7 @@ You can also load in data files.  There is a strong preference among those that 
 
 library(readr)  # This is better than base r at reading files.
 
-read_csv("catholic.csv")
+catholic <- read_csv("catholic.csv")
 
 ```
 
@@ -87,12 +87,19 @@ library(dplyr)  # Data wrangling tools.
 campus %>%  # %>% is called a pipe.  You pronounce it as "and then"
   View()
 
+campus %>%
+  mutate(officers_per_student = police/enroll) -> campus
 ```
 
 This class will only teach you how to deal with cross-sectional data.  
 
 Figure out which data are cross-sectional and `rm()` the others. Don't do this in the console.  Create a new chunk or code block below this paragraph and document what you did.  
 
+```{r}
+
+# Killing the time series data because that is not for this class.
+rm(UNRATE)
+```
 
 Get used to documenting your changes with code and writing notes to your future self, i.e., documentation.  
 
@@ -105,7 +112,7 @@ R has a bunch of low-level built in functions to give you simple statistical sum
 
 ```{r}
 
-
+mean(campus$enroll)
 ```
 You could do find the mean for each variable with something like mean(campus$enroll), but that is copypasta and violates the don't repeat yourslf principle ([DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)) 
 
@@ -122,6 +129,14 @@ Lets figure out how to do this more flexibly.  Try googling "dplyr mean each col
 
 ```{r mean_dplyr_style}
 
+library(dplyr)
+
+campus %>%
+  summarise(
+    across(where(is.numeric), mean), 
+    across(where(is.factor), nlevels),
+    n = n(), 
+  )
 
 
 ```
@@ -131,7 +146,7 @@ Lets figure out how to do this more flexibly.  Try googling "dplyr mean each col
 If this all seems like a lot of work for something ordinary and that someone must of had to do this before.  You are right.  Try installing "gtsummary".
 
 ```{r easy_summary_statistics}
-library(gtsummary)
+
 
 campus %>%
   tbl_summary(statistic = list(all_continuous() ~ "{mean} ({sd})",
