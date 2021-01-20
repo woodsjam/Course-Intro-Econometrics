@@ -191,6 +191,8 @@ You should see:
 + priv, which is a dummy variable indicator should look odd.  It is coded as a 1/0.  We will deal with this  kind of problem later in the course.
 + The lower triangle are scatter plots of one variable vs the others.
 
+***SOMETHING DIFFERENT***
+
 Now work through this:
 
 +  See lcrime and crime? One is a log transform of the other, but the correlation coefficient is .777.  Why?
