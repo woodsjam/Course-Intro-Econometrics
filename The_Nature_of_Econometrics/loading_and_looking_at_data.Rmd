@@ -147,6 +147,7 @@ If this all seems like a lot of work for something ordinary and that someone mus
 
 ```{r easy_summary_statistics}
 
+library(gtsummary)
 
 campus %>%
   tbl_summary(statistic = list(all_continuous() ~ "{mean} ({sd})",
@@ -227,6 +228,20 @@ Some of these are also correlated with a school being either private or public. 
 
 *Try making a similar diagram between enrollment and crime*
 
+```{r try_enrollment_crime}
+
+
+library(ggplot2)
+
+campus %>%
+  ggplot(aes(y = lcrime, x = lenroll, colour = as.factor(priv))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+
+```
+
+
 
 Boxplots are another exploratory technique. ggpairs will do this for you.  Boxplots are useful if you want to get an idea of the variance of the data and if the medians are different depending on a factor.
 
@@ -240,6 +255,15 @@ campus %>%
 ```
 
 *Try to do something similar with crime.*
+
+```{r}
+
+campus %>%
+  ggplot(aes(y = crime, x = as.factor(priv))) +
+  geom_boxplot(notch = TRUE)
+
+```
+
 
 You can also get similar information, but not the visual hypothesis tests with histograms.
 

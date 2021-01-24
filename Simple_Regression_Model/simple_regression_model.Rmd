@@ -1,0 +1,216 @@
+---
+title: "The Simple Regression Model"
+author: "Jamie Woods"
+date: "1/22/2021"
+output: 
+  html_notebook: 
+    fig_height: 8
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+We are going to build up your intuition on how some features of your data generating process express themselves in the sample you draw from that process and the statistics, parameter estimates and the like, that come from your regression estimates.
+
+Keep in mind that we are starting with known population characteristics, something we can't do in real life.
+
+We are envisioning a model like this:
+
+$$Y = \alpha + \beta x + \nu$$
+
+We will alter:
+
++ The standard deviation of the error term, $\nu$.
++ $\alpha$, which is the intercept term.
++ $\beta$, which is the slope coeficient on X.
++ $N$, the number of observations in the sample we get from the population.
++ The range of the X variable, which we will draw from a uniform distribution.
+
+
+Check out the SimpleRegressionData function below.  It is rigged so there are default values for everything.
+
+What it does is take values for alpha, beta, the range of X and the standard deviation of the error term. What this function does is enables us to get as many _samples_ as we like, of any size, from our _population_ distribution, the data generating function, so we can play with it.
+
+```{r}
+# Used to generate fake data.   This has no checks that parameters are in the right range.
+
+SimpleRegressionData <- function(alpha = 1, 
+                                 beta = 5, 
+                                 rangex = c(0, 10), 
+                                 sigma = 1,
+                                 N = 100)
+  {
+    ret <- data.frame(X = runif(N, rangex[1], rangex[2]),
+                      er = rnorm(N, 0, sigma))
+    ret$Y <- alpha + (beta * ret$X) + ret$er
+    ret
+}
+
+```
+
+Every time you run the function, new data will come out.
+
++ Run the function in a chunk and produce some summary statistics.  Do this a few times.  
+
+```{r}
+library(gtsummary)
+
+SimpleRegressionData(N = 10) %>%
+  tbl_summary(statistic = list(all_continuous() ~ "{mean} ({sd})",
+                     all_categorical() ~ "{n} / {N} ({p}%)"),)
+```
+
++ Run the function again but this time alter the standard deviation of the error term to 10.
+
+
+
+Now we are going to run some regressions with this fake data.  The widget below generates fake data, plots it, draws a line through it, and gives the usual regression output.
+
+The graph and table will update, generating new data, every time you change a slider so it won't always be smooth transition.
+
+```{r echo=FALSE}
+library(shiny)
+library(ggplot2)
+library(gtsummary)
+
+
+
+shinyApp(
+
+ui = fluidPage(height = "100%",
+
+  
+  sidebarLayout(
+    sidebarPanel(
+  sliderInput("Sigma", label = "Sigma:", min = 0, max = 50,  value = 1),
+
+  sliderInput("Alpha", "Alpha:",  min = -10, max = 10, value = 1),
+
+  sliderInput("Beta", "Beta:",  min = -10, max = 10, value = 2),
+
+  sliderInput("NObs", "N:",  min = 5, max = 200, value = 20), 
+  
+  sliderInput("Rangex", "Range X", min = -10, max = 30, value = c(0,5))
+  
+    ),
+  
+  mainPanel(
+ plotOutput("lm_plot"),
+ 
+ htmlOutput("lm_result")
+  )
+  )
+),
+
+
+server = function(input, output){
+  
+   # simulated_data <- reactive({
+   #   SimpleRegressionData(alpha = input$Alpha, beta = input$Beta, rangex = c(input$Startx, input$Startx + input$Rangex), sigma = input$Sigma, N = input$NObs)
+   #   
+   # })
+
+     
+   simulated_data <- reactive({
+     SimpleRegressionData(alpha = input$Alpha, beta = input$Beta, rangex = input$Rangex, sigma = input$Sigma, N = input$NObs)
+   })
+
+   
+      
+   output$data = renderPrint({head(simulated_data(), 5)})
+ 
+  output$lm_result = renderPrint({
+      lm(Y~X, data = simulated_data())%>% 
+      tbl_regression(intercept = TRUE) 
+    })
+
+  output$lm_plot = 
+    renderPlot({
+     simulated_data() %>%
+  ggplot(aes(y = Y, x = X)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+    })
+  
+   # output$data = renderPrint(head(SimpleRegressionData(alpha = input$Alpha, beta = input$Beta, rangex = c(input$Startx, input$Startx + input$Rangex), sigma = input$Sigma, N = input$NObs), 5))
+  # 
+  
+}
+
+)
+```
+
+We will get the details on the distribution of the confidence intervals and the p-values in the next section.  Alpha, (Intercept) in the Toy Regression output is the estimated intercept and Beta, X in the Toy Regression output is the slope coefficient.
+
+
+# Messing with N
+
++  Change the number of observations, N, in the sample over a wide range.
+
+    + Do the estimates of $\alpha$ and $\beta$ change much over the range?
+    + Look at the confidence intervals over the range of N you choose, what happens to them as N increases?
+    
+
++ Pick a small N, like 8.  Note the coefficients for $\alpha$ and $\beta$. Move the slider back and forth between 8 and 9, or as small a change as you can make.  This generates new samples from the population.
+
+    + What happens to the estimates of $\alpha$ and $\beta$?
+    + How wide is the confidence interval?  Does it change much?
+    
++ Pick a larger N, like 100.  Note the coefficients for $\alpha$ and $\beta$. Move the slider back and forth between 100 and 101, or as small a change as you can make.  This generates new samples from the population.
+
+    + What happens to the estimates of $\alpha$ and $\beta$ when you get a new sample?
+    + How wide is the confidence interval relative to when N was small?
+    +  Does you confidence interval change much relative to when N was small?
+    
+## Discussion
+
+PUT YOUR NOTES HERE
+
+
+# Messing with $\sigma$
+
+What we are going to do now is play with the part of the data we can't observe, the unsystematic part.  It is a grand summary of the effects of everything that is not in the model.   We assume that:
+
+$$E(u|x) = E(u) =0$$
+
+Set your parameters to some reasonable values, $\alpha = 1$ and $\beta = 2$, and have N at about 30 or so.
+
++ Set sigma to zero.  What do you see and intuitively what does that mean?
+
++ Set sigma to something small, like one, and then compare it to a large sigma like 50.  What changes do you see in sizes of the confidence intervals?
+
++ Set sigma to the maximum then move the slider back and forth between 50 and 49, or as small a change as you can make.  This generates new samples from the population.  See if you can generate both positive and negative slopes.
+
+## Discussion
+
+YOUR NOTES HERE
+
+# Messing with the range of X
+
+Don't get stuck with the idea that the Xs, the right-hand side variables, don't matter that much.  The variance of the exogenous variables, $var(x)$, is a big deteriminant of the regression coefficients. 
+
+$$\hat{\beta} = \frac{cov(x,y)}{var(x)}$$
+
+Set your parameters to some reasonable values, $\alpha = 1$ and $\beta = 2$, and have N at about 30 with $\sigma =1$ or so. 
+
++  Set the range of x so that the high and low value are the same.  What happened?
+
+    + Why is there no parameter estimate for $\beta$?
+    + Why is there still a parameter estimate for the intercept?
+    + Set the N to the maximum.  What happens to the estimate for the intercept?
+    
++ Put N back at about 20 and set the lowest value of X to -10 and then start increasing the upper bound from there.
+
+    + What happens to the confidence interval for X, i.e, the $\beta$?
+
+
+## Discussion
+
+
+YOUR NOTES HERE
+
+
