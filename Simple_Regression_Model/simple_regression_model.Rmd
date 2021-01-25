@@ -214,3 +214,19 @@ Set your parameters to some reasonable values, $\alpha = 1$ and $\beta = 2$, and
 YOUR NOTES HERE
 
 
+# The Power of One Observation
+
+# Three Ways to $\beta$
+
+## A Note on R Representation of Functional Form
+
+# F, $R^2$ and goodness-of-fit
+
+# Changing Units
+
+# Logs and Levels
+
+# $Var(\hat{\beta})$ and $\hat{\sigma}^2$
+
+# Regression through Origin: Our First Restriction
+
