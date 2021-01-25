@@ -220,7 +220,7 @@ YOUR NOTES HERE
 
 ## A Note on R Representation of Functional Form
 
-# F, $R^2$ and goodness-of-fit
+# F, $R^2$ and Goodness-of-fit
 
 # Changing Units
 
