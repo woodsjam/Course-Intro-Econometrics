@@ -216,15 +216,293 @@ YOUR NOTES HERE
 
 # The Power of One Observation
 
+You will mostly be looking at data where one observation looks similar to others with about the same conditional means and so on.  Every so often you get a few odd ball observation.  Sometimes these are coding errors.  There are some typical problems to look for including: 
+
++ Flipped digits, "912" coded as "192".
++ Factor of 10 errors, decimal in the wrong place, "10.0" coded as "100"
++
+
+Sometimes the odd observations are because of some unmodeled, i.e., subsumed into the error term, event.  If the event is so rare that it only happens only a small number of times in your data set. This one observation can make large changes in your parameter estimates. 
+
+The toy below allows you to move one data point. The data is generated as it was before with $Y = 0 + 0 X + \nu$.  The regression line should show as a nearly horizontal line.
+
+The two sliders allow you to move one dot.  It starts at (0,0), $(\bar{Y},\bar{X})$ which is always on the regression line.  You can move the dot left and right and up and down.
+
+```{r echo=FALSE, warning=FALSE}
+library(shiny)
+library(ggplot2)
+library(tidyverse)
+
+
+
+shinyApp(
+
+ui = fluidPage(height = "100%",
+
+  
+  sidebarLayout(
+    sidebarPanel(
+
+  sliderInput("Outlier_x", "Outlier X:",  min = -30, max = 30, value = 0), 
+  
+  sliderInput("Outlier_y", "Outlier Y:", min = -20, max = 20, value = 0)
+  
+    ),
+  
+  mainPanel(
+ plotOutput("lm_plot"),
+ 
+ htmlOutput("lm_result")
+  )
+  )
+),
+
+
+server = function(input, output){
+  
+  base_simulated_data <-   SimpleRegressionData(alpha = 0, beta = 0, rangex = c(-15, 15), sigma = 2, N = 30)
+  
+   simulated_data <- reactive({
+     base_simulated_data %>%
+       add_row(X = input$Outlier_x, Y = input$Outlier_y,er =0)
+   })
+
+   
+      
+   output$data = renderPrint({head(simulated_data(), 5)})
+ 
+  output$lm_result = renderPrint({
+      lm(Y~X, data = simulated_data())%>% 
+      tbl_regression(intercept = TRUE) 
+    })
+
+  output$lm_plot = 
+    renderPlot({
+     simulated_data() %>%
+  ggplot(aes(y = Y, x = X)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+    })
+  
+  
+}
+
+)
+```
+
+
++ Set the Outlier X slider to zero, i.e, $\bar{X}$.  Vary the Outlier Y.  What happens to the regression output?
+
++ Set the Outlier Y to something large.  What happens to the regression output as you vary X?
+
+## Discussion
+
+
 # Three Ways to $\beta$
 
-## A Note on R Representation of Functional Form
+## A Note on R Representation of Functional Form and the lm function.
 
+R has a workhorse function, `lm` that handles linear regression for you.  There are plenty of others that do regression and other thing `sysfit` amd `glm` are the others that do linear regression and more.  
+
+The thing that is tricky about R is the compact way they represent linear regressions. Lets work with a different dataset than we have before to demo this.
+
+```{r}
+data("USArrests")
+summary(USArrests)
+```
+
+You can peek at the variable definitions, they are per 100,00 murders, assaults and rape by state with the percent of the state that is in an urban area.
+
+We can regress the percent urban population on the murder rate like this.  When you run this you get just the parameter estimates and little else.  The `~` acts as the equal sign separating the RHS from the LHS.
+
+```{r}
+
+lm(Murder ~ UrbanPop, data = USArrests)
+
+```
+We can store the results in a new object, `lm_murder_pop`, lm for the model, murder for the lhs and pop for the rhs. and then use the `names` function to show you what is stored.
+
+```{r}
+lm_murder_pop <- lm(Murder ~ UrbanPop, data = USArrests)
+
+names(lm_murder_pop)
+```
+
+You can get at this with the usual `$` operator.
+
+To see the usual regression output you can wrap the `lm` call in a `summary` or you can use pipes to send results around.  These all do the same thing, estimate a regression and show you the results through summary.  Everything in the chunk below does the same thing, just in a different way.  The outputs will be identical.
+
+```{r}
+
+summary(lm(Murder ~ UrbanPop, data = USArrests)) # all on one line and result is not stored.
+
+
+# Storing results for later is common when it takes more than 1/10th of a second for the results to appear.
+
+lm_murder_pop <- lm(Murder ~ UrbanPop, data = USArrests) # Do the regression and store it.
+summary(lm_murder_pop)  # give the standard output.
+
+# These are dplyrish methods
+
+lm_murder_pop %>%
+  summary()
+
+
+# This one starts with the data and pipes it to a regression and then to summary.
+# the . is the only odd part.  Pipes usually assume they go to the first argument but
+# the . says, put it here.
+
+USArrests %>%
+  lm(Murder ~ UrbanPop, data = .) %>%
+  summary()
+
+```
+
+The formula argument is a reasonably flexible and compact way of expressing the regression equation. The simple `Murder ~ UrbanPop` we used above translates to:
+
+```{r results = "asis"}
+library(equatiomatic)
+
+extract_eq(lm_murder_pop)
+
+```
+
+You can do some simple transformations, like square and logs or even add variables together too.
+
+This logs the LHS
+```{r results = "asis"}
+lm(log(Murder) ~ UrbanPop, data = USArrests) %>%
+  extract_eq()
+```
+
+
+If you want to do math on the rhs, you need to wrap the variable in an `I()` function.  This describes the log of the murder rate with the square of the percent urban population.
+
+```{r results = "asis"}
+lm(log(Murder) ~ I(UrbanPop^2), data = USArrests) %>%
+  extract_eq()
+```
+
+If you want to add another variable on the RHS just append it with a `+`
+
+```{r results = "asis"}
+lm(Murder ~ UrbanPop + Assault, data = USArrests) %>%
+  extract_eq()
+```
+
+Note that the regression always includes and intercept term, the $\alpha$ unless you tell it not to include one with a `-1`.
+
+```{r results = "asis"}
+lm(Murder ~ -1 + UrbanPop + Assault, data = USArrests) %>%
+  extract_eq()
+```
+
+There are ways to do more complex things, like interact variables, but we will put those off till later.  R handles some low level tasks, like squaring and logging and constructing dummy variable series, for you so you don't have to construct new variables before you create a regression.  You will have to get used to doing this on your own if you learn  SAS or Stata in the future.
+
+Lets Id the outputs now.
+
+```{r}
+USArrests %>%
+  lm(Murder ~ UrbanPop, data = .) %>%
+  summary()
+
+
+```
+
+
+Starting at the top.
+
++ Call:  Is just a neatened up version of how you wrote the lm function call.
++ Residuals:  The min max and IQR of the error terms.  You know the mean is zero by definition.
++ Coefficients:  This is your meat.  Each parameter is named after the associated data column or the intercept.  The other columns are:
+    + Estimate: What is says on the box.  These are the means, remember the estimates are random variables, of slope and intercepts.
+    + Std. Error: The estimates are random variables so they are known with uncertainty.  This is the standard deviation of those estimates.
+    + t value:  Calculation done for you.  It is the number of standard deviation the estimate is away from the mean, $\frac{Estimate}{Std. ~Error}$
+    + p(>|t|):  Interprets the t value and tells you the probability of observing the estimate or larger when the true value of the parameter is zero.  If this number is small, meaning it is unlikely, there will be some asterisks next to it.
++ Residual standard error:  Tells you a few things.  It tells you the standard error of the $\epsilon$  term and tells you how many degrees of freedom were used to estimate the standard error.  For now, this is just the number of observations, N, minus the number of parameters you have estimated in the regression, 2 in this case, one for the intercept and one for the slope.   
+
+The last two lines are about the regression as a whole, which is the next topic.
+    
 # F, $R^2$ and Goodness-of-fit
 
 # Changing Units
 
+
+Changing units, like changing income from dollars to thousands of dollars, is a pretty common exercise.  
+
+There are some good reasons to do it.  All your statistics are calculated in a computer using floating point arithmetic.  You have to be careful with that.  When you add numbers together, which you need to do to calculate your parameter estimates, all the numbers should be on about the same scale.  So, if you have one variable that looks like 0.000005 and another that looks like 50,000,000, there is a good chance your computer will tell you rounding and truncation error lies.
+
+Getting things on the same scale will also help you interpret parameters because the parameters themselves will be on a similar scale.
+
+Changing scale, multiplying a RHS variable by a scalar, is pretty common and does something reasonable.
+
+Lets use the USArrests data again and demonstrate.
+
+Here is the original Murder Regression.
+```{r}
+USArrests %>%
+  lm(Murder ~ UrbanPop, data = .) %>%
+  summary()
+
+```
+
+
+Keep an eye on the parameter estimates.  Now I lets change the data so that instead of urban population being expressed as a percent it is expressed as a fraction, i.e., divide by 100.
+
+```{r}
+USArrests %>%
+  mutate(UrbanPop_frac = UrbanPop/100) %>%
+  lm(Murder ~ UrbanPop_frac, data = .) %>%
+  summary()
+
+```
+
++ What happened to the intercept term and variance?
+
++ What happened to the slope coefficient, UrbanPop_frac relative to UrbanPop?
+
++ What happened to the regression summaries, $R^2$, F and such?
+
+
+Try this again on your own but instead of multiplying something on the right hand side, I want you to add 5 to the murder rate, the LHS variable.
+
+```{r}
+
+```
+
+
++ What happened to the intercept term and variance?
+
++ What happened to the slope coefficient?
+
++ What happened to the regression summaries, $R^2$, F and such?
+
+
+Try it again but this time change the murder rate from murders per 100,000 to murders per 1,000.
+
+```{r}
+
+
+```
+
++ What happened to the intercept term and variance?
+
++ What happened to the slope coefficient?
+
++ What happened to the regression summaries, $R^2$, F and such?
+
+
 # Logs and Levels
+
+
+```{r}
+library(GGally)
+
+USArrests %>%
+  ggpairs()
+```
+
+
 
 # $Var(\hat{\beta})$ and $\hat{\sigma}^2$
 

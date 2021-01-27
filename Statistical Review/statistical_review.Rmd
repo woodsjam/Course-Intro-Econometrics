@@ -102,6 +102,9 @@ Our equations will generally be polynomials and we will often be interested in t
 
 - $\ln(y) = \beta_1 z_1 + \beta_2 z_2^2$ Is this linear in the parameters? Can it be linearized with a ln transform? If so, show.
 
+
+
+
 - $y = \beta_1\beta_2x^{\beta_3}$ Is this linear in the parameters? Can it be linearized with a ln transform?  If so, show.
 
 $$ y = \beta_1\beta_2x^{\beta_3} \\
@@ -112,11 +115,31 @@ $$
 
 - Given $Income = 10 + .5 ~experience - .1 ~experince^2$, which explains income with years of experience, what is the marginal effect of a year of experience? 
 
+$$\frac{\partial Income}{\partial Experience} = .5 - .1 (2) Experience$$
+
 - Given $Income = 10 + .5 ~experience - .1 ~experince^2$, which explains income with years of experience, when will income be maximized? 
+
+
+$$.5 - .1 (2) Experience =0\\
+.5 =.2 ~Experience\\
+Experience = \frac{.5}{.2}
+$$
 
 - Given a demand function, $Q = e^{-5p} + 4$ what is the marginal effect of price changes?
 
+$$- 5 e^{-5 p}$$
+
 - Given a demand function, $Q = e^{-5p} + 4$ at what price will people stop buying the good?
+
+
+$$Q = e^{-5p} + 4 =0 \\
+e^{-5p} = - 4\\
+-5p = - ln(4)\\
+5p = ln(4)\\
+p = \frac{ln(4)}{5}
+$$
+
+
 
 - Given a demand function, $Q = e^{p^2-5p} + 4$ what is the marginal effect of price changes?
 
@@ -146,9 +169,15 @@ This kind of depends on you remembering this from your stats classes or that you
 
 - What is the probability that x and y are the same?
 
+
+
 - What is the marginal distribution of x, $p(x)$
 
+$$P(x =1 ) = p(x=1|y =1)+ p(x =1 |y=2)+ p(x=1|y =3)$$
+
 - What is the conditional distribution of x given that y is 2, $p(x|y = 2)$
+
+$$p(x = 1| y =2) = \frac{p(x=1, y=2)}{p(y=2)} $$
 
 
 
