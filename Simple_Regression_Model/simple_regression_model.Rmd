@@ -494,6 +494,7 @@ Try it again but this time change the murder rate from murders per 100,000 to mu
 
 # Logs and Levels
 
+Lets look at the simplest transformation, the log transform.  You should be interested in this for a few reasons, some statistical and some as a better way to link to theory.  Take a peek at the USArrests data.
 
 ```{r}
 library(GGally)
@@ -502,6 +503,39 @@ USArrests %>%
   ggpairs()
 ```
 
+
+Do you see how all the variables are roughly positively correlated?  Notice that a few may show a relationship that is increasing but at a decreasing rate.  That is the perfect circumstance to consider a log, or as we will later see a polynomial specification.  
+
+Logs have the right characteristics.
+
+$$\frac{\partial}{\partial x}ln(x) = \frac{1}{x}\\
+\frac{\partial^2}{\partial x^2}ln(x) = - \frac{1}{x^2}
+$$
+The first derivative is positive and the second is negative, i.e., increasing at a decreasing rate.
+
+
+Try looking the linear-linear relationship between Murder and Assault. A one unit increase in assault, 1 per 100,000, is related to a $\beta_1$ increase in assaults per 100,000.  
+```{r}
+
+```
+
+Try looking the log-linear relationship between Murder and Assault. A one unit increase in assault, 1 per 100,000, is related to a $\beta_1$% increase in assaults per 100,000.  
+```{r}
+
+```
+
+
+Try looking the linear-log relationship between Murder and Assault. A one percent increase in assaults per 100,000, is related to a $\beta_1$ increase in assaults per 100,000.  
+```{r}
+
+```
+
+
+Try looking the log-log relationship between Murder and Assault. A one percent increase in assaults per 100,000, is related to a $\beta_1$% increase in assaults per 100,000.  
+
+```{r}
+
+```
 
 
 # $Var(\hat{\beta})$ and $\hat{\sigma}^2$
