@@ -4,7 +4,9 @@ author: "Jamie Woods"
 date: "1/22/2021"
 output: 
   html_notebook: 
-    fig_height: 8
+    fig_width: 6
+    fig_height: 12
+
 runtime: shiny
 ---
 
@@ -24,9 +26,9 @@ $$Y = \alpha + \beta x + \nu$$
 
 We will alter:
 
-+ The standard deviation of the error term, $\nu$.
++ The standard deviation of the error^[I'll swap error and residual for a while but when talking about populations use error nd when talking about samples use residuals.  We will solidify that division a little later.] term, $\nu$.
 + $\alpha$, which is the intercept term.
-+ $\beta$, which is the slope coeficient on X.
++ $\beta$, which is the slope coefficient on X.
 + $N$, the number of observations in the sample we get from the population.
 + The range of the X variable, which we will draw from a uniform distribution.
 
@@ -64,7 +66,7 @@ SimpleRegressionData(N = 10) %>%
                      all_categorical() ~ "{n} / {N} ({p}%)"),)
 ```
 
-+ Run the function again but this time alter the standard deviation of the error term to 10.
++ Run the function again but this time alter the standard deviation of the error^[Here is another question about using errors or residuals thing.  We are altering the population value so we should talk errors but we are generating residuals.] term to 10.
 
 
 
@@ -152,6 +154,9 @@ We will get the details on the distribution of the confidence intervals and the 
 +  Change the number of observations, N, in the sample over a wide range.
 
     + Do the estimates of $\alpha$ and $\beta$ change much over the range?
+    
+    The estimates don't change that much but they do change. There is sampling distribution.
+    
     + Look at the confidence intervals over the range of N you choose, what happens to them as N increases?
     
 
@@ -168,7 +173,9 @@ We will get the details on the distribution of the confidence intervals and the 
     
 ## Discussion
 
-PUT YOUR NOTES HERE
+As N increases parameter estimates get more stable from sample to sample.  They don't move much.
+
+As N increase, your confidence intervals get narrower.  They still change from sample to sample but not as much.
 
 
 # Messing with $\sigma$
@@ -187,7 +194,7 @@ Set your parameters to some reasonable values, $\alpha = 1$ and $\beta = 2$, and
 
 ## Discussion
 
-YOUR NOTES HERE
+As the standard deviation of the error term increases, the confidence intervals get wider.
 
 # Messing with the range of X
 
@@ -220,7 +227,7 @@ You will mostly be looking at data where one observation looks similar to others
 
 + Flipped digits, "912" coded as "192".
 + Factor of 10 errors, decimal in the wrong place, "10.0" coded as "100"
-+
+
 
 Sometimes the odd observations are because of some unmodeled, i.e., subsumed into the error term, event.  If the event is so rare that it only happens only a small number of times in your data set. This one observation can make large changes in your parameter estimates. 
 
@@ -297,6 +304,10 @@ server = function(input, output){
 
 ## Discussion
 
+
+IRL, outliers like that are an indication that there was a data capture problem, like flipping the first two digits or format change.  Sometimes data comes from many sources and may only superficially look the same.  My favorite example was when I was working with some billing data, for a few 10,000 of customers, and the data passed the reasonableness screens.  What happened was that for a small number of households over two months, the date format changed from near ISO YYMMDD to US MMDDYY.  The outlier analysis detected this.
+
+The other thing they do is indicate that you should do some additional investigation.  It could be that you should include another variable, indicating days with tornadoes in one case, or that the data was missing something important, like the existence of restaurants in buildings that were part of a data set.  All these examples were discussed in class. 
 
 # Three Ways to $\beta$
 
@@ -413,7 +424,7 @@ USArrests %>%
 Starting at the top.
 
 + Call:  Is just a neatened up version of how you wrote the lm function call.
-+ Residuals:  The min max and IQR of the error terms.  You know the mean is zero by definition.
++ Residuals:  The min max and IQR of the residual terms.  You know the mean is zero by definition.
 + Coefficients:  This is your meat.  Each parameter is named after the associated data column or the intercept.  The other columns are:
     + Estimate: What is says on the box.  These are the means, remember the estimates are random variables, of slope and intercepts.
     + Std. Error: The estimates are random variables so they are known with uncertainty.  This is the standard deviation of those estimates.
@@ -424,6 +435,81 @@ Starting at the top.
 The last two lines are about the regression as a whole, which is the next topic.
     
 # F, $R^2$ and Goodness-of-fit
+
+You can think of these two as a pair similar to the parameter estimate and their variance.  $R^2$ is to $\hat{\beta}$ as $F$ is to $t-value$. Both $R^2$ and  $\hat{\beta}$ give an effect size. Both $F$ and the $t-value$ are used to calculate the significance of that effect size.
+
+The real question is what effect is the $R^2$ measuring?  It is basically the fraction of the total variation in the RHS variable explained by the equation or one minus the ratio of the variance of the error term and the LHS variable.  Put another way you are getting a measure of the explanatory power of all the variables that are not the intercept, meaning the mean of the RHS with no other conditioning variables.
+
+There is another regression toy below that allows you to alter both the standard deviation of the error term and the number of observations.
+
+```{r echo=FALSE, warning=FALSE}
+library(shiny)
+library(ggplot2)
+library(tidyverse)
+
+
+
+shinyApp(
+
+ui = fluidPage(height = "100%",
+
+  
+  sidebarLayout(
+    sidebarPanel(
+
+  sliderInput("Sigma", "sigma:",  min = .01, max = 30, value = 1), 
+
+  
+  sliderInput("Obs", "N:",  min = 20, max = 1000, value = 20), 
+
+    ),
+  
+  mainPanel(
+ plotOutput("lm_plot"),
+ 
+ verbatimTextOutput("lm_result")
+  )
+  )
+),
+
+
+server = function(input, output){
+  
+  base_simulated_data <-   SimpleRegressionData(alpha = 1, beta = 2, rangex = c(-15, 15), sigma = 1, N = 1000)
+  
+   simulated_data <- reactive({
+     base_simulated_data %>%
+       mutate(Y = 1 + (2*X) + (er*input$Sigma)) %>%
+       head(input$Obs)
+   })
+
+   
+      
+   output$data = renderPrint({head(simulated_data(), 5)})
+ 
+  output$lm_result = renderPrint({
+      lm(Y~X, data = simulated_data())%>% 
+      summary()
+    })
+
+  output$lm_plot = 
+    renderPlot({
+     simulated_data() %>%
+  ggplot(aes(y = Y, x = X)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+    })
+  
+  
+}
+
+)
+```
+
+
++ Set sigma to something reasonable and observe the $R^2$ and then vary the number of observations.  Does your $R^2$ change much?  What about the F statistic?
+
++ Set the number of observatons to a moderate value, around 100, and then vary the standard deviation.  What do you observe?
 
 # Changing Units
 
