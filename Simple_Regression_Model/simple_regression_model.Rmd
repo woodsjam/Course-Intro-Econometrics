@@ -81,7 +81,8 @@ library(gtsummary)
 
 
 
-shinyApp(
+shinyApp(options = list(
+    width = "100%", height = 1200),
 
 ui = fluidPage(height = "100%",
 
@@ -198,7 +199,7 @@ As the standard deviation of the error term increases, the confidence intervals 
 
 # Messing with the range of X
 
-Don't get stuck with the idea that the Xs, the right-hand side variables, don't matter that much.  The variance of the exogenous variables, $var(x)$, is a big deteriminant of the regression coefficients. 
+Don't get stuck with the idea that the Xs, the right-hand side variables, don't matter that much.  The variance of the exogenous variables, $var(x)$, is a big determinant of the regression coefficients. 
 
 $$\hat{\beta} = \frac{cov(x,y)}{var(x)}$$
 
@@ -242,7 +243,8 @@ library(tidyverse)
 
 
 
-shinyApp(
+shinyApp(options = list(
+    width = "100%", height = 900),
 
 ui = fluidPage(height = "100%",
 
@@ -449,7 +451,8 @@ library(tidyverse)
 
 
 
-shinyApp(
+shinyApp(  options = list(
+    width = "100%", height = 1100),
 
 ui = fluidPage(height = "100%",
 
