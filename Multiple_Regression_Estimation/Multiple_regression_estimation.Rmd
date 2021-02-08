@@ -1,0 +1,231 @@
+---
+title: "Multiple Regression Estimation"
+author: "Jamie Woods"
+date: "1/22/2021"
+output: 
+  html_notebook: 
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Marginal Effects When There is More than One RHS Variable
+
+-   what it means
+-   What does ceterus paribus mean in this context.
+
+# OLS in Matrix notation
+
+The book has solid description of the summation style least squares problem. It can get a little notation heavy for what you are doing. If you remember your linear algebra class, the matrix form is a little easier to grasp. The problem is to choose $\hat{\beta}$ such that the residuals term, $(y-\hat{\beta}x)$, when squared and added together, $(y-\hat{\beta}x)'(y-\hat{\beta}x)$ is minimized.
+
+$$\max_{\hat{\beta}}(y-\hat{\beta}x)'(y-\hat{\beta}x)$$
+
+Split this out so it is easier to work with and take the derivative.
+
+$$\max_{\hat{\beta}} y'y - 2\hat{\beta}x'y +\hat{\beta}^2 x'x\\
+-2 x'y + 2 \hat{\beta} x'x = 0\\
+\hat{\beta} = (x'x)^{-1} x'y
+$$
+
+# Exploration of a Multiple Regression
+
+Our visualizations will be a little different in this section. In the last section we showed scatter plot of the x and y variables. The problem we have not is that there could be lots of x variables and only one y.
+
+The easiest way of looking at patterns in the residuals is to plot them on the vertical axis and plot $\hat{y}$ on the horizontal. We will do this a little bit later.
+
+Lets introduce a few functions that will help with these visualizations, `predict` and `residual`. Lets start with loading in the USArrests data and doing the same Murder regression from the simple regression Rmd.
+
+```{r}
+
+data("USArrests")
+
+lm_murder_pop <- lm(Murder ~ UrbanPop, data = USArrests)
+
+```
+
+We can look at the regression like we did before.
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+
+USArrests %>%
+  ggplot(aes(y = Murder, x = UrbanPop)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
+
+But what we are going to do now is look at $\hat{y}$, the predicted number of murders per 100,000 and the difference between that number and actual. The blue line is just for reference, residuals should be zero on average. This is just an easy trick to get a blue line where I wanted it.
+
+```{r}
+data.frame(Murder_hat = predict(lm_murder_pop),
+           Resid = residuals(lm_murder_pop)) %>%
+  ggplot(aes(y= Resid, x = Murder_hat)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
+
+This is the standard view for multiple regression when you are not looking at individual variables. About the only thing that should give you pause is that there there are more states with residuals greater than 5 murders per 100,000 than less than -5 murders per 100,000.
+
+# Omitted Variables
+
+This is what we will use to generate our fake data that will help us illustrate the effects of an omitted variable. There are some simplifications. Keep in mind that $corr(x,y) = \frac{cov(x,y)}{\sigma_x \sigma_y}$. This assumes that $\sigma_1 = \sigma_2 = 1$ which implies that $cov(x,y) = corr(x,y)$.
+
+```{r}
+
+# Generates a data frame with three RHS variables in the form y = \alpha + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3.  Cor(x_2, x_3), N, and \beta_2 are adjustable and cor(x_1, x_2) =0, \alpha = 1, \beta_1 = 2, \beta_3 = 5, sigma = 2 are fixed.  Standard deviations of all x variables are assumed 1 and all means are assumed zero. Sigma is assumed .5.
+
+
+
+gen_data_for_missing <- function(N = 200, beta_2 = 2, cor_3_2 = 0) {
+  sigma <- matrix(c(
+    1, 0, 0,
+    0, 1, cor_3_2,
+    0, cor_3_2, 1
+  ),
+  nrow = 3, ncol = 3
+  )
+
+  mu <- c(x1 = 0, x2 = 0, x3 = 0)
+
+  ret <- MASS::mvrnorm(N, mu = mu, Sigma = sigma) %>% as.data.frame()
+
+  ret$y <- 1 + (2 * ret$x1) + (beta_2 * ret$x2) + (5 * ret$x3) + rnorm(N, sd = .5)
+
+  ret
+}
+
+
+
+# gen_data_for_missing()
+```
+
+What we are doing is generating some data where x1 and x2 are uncorrelated but x2 and x3 may be correlated. The population relationship is $y= 1 + 2 x_1 + \beta_2 x_2 + 5 \beta_3 x_3$ but we are excluding the third variable and estimating $y= 1 + 2 x_1 + \beta_2 x_2$ instead.
+
+```{r echo=FALSE}
+library(shiny)
+library(ggplot2)
+
+shinyApp(
+  options = list(
+    width = "100%", height = 700
+  ),
+
+  ui = fluidPage(
+    sidebarLayout(
+      sidebarPanel(
+
+        sliderInput("Beta2", "Beta_2:", min = -10, max = 10, value = 2),
+
+        sliderInput("Corr23", "Corr_2,3", min = -1, max = 1, value = 0, step = .1 )
+      ),
+
+      mainPanel(
+        verbatimTextOutput("lm_result")
+      )
+    )
+  ),
+
+
+  server = function(input, output) {
+
+    simulated_data <- reactive({
+      gen_data_for_missing(N = 200, beta_2 = input$Beta2, cor_3_2 = input$Corr23)
+
+    })
+    
+
+    output$data <- renderPrint({
+      head(simulated_data(), 5)
+    })
+
+output$lm_result = renderPrint({
+      lm(y ~ x1 + x2, data = simulated_data() ) %>% 
+      summary()
+    })
+
+
+  }
+)
+```
+
+Keep in mind that $x_1$ and $x_2$ are independent but you are in control of the linear correlation between $x_2$ and $x_3$.
+
+-   Set $\beta_2$ to some moderate positive value, and set $corr(x_2,x_3) = 0$.
+
+-   Observe the parameter values for the intercept, which should be close to 1, x1, which should be close to 2, and x2 which should be close to the value you set. Is that happening?
+
+-   Now swing the correlation between x2 and the missing x3 variable so there is a positive correlation. What happened to the parameter estimates? Which ones changed? Which direction did they change?
+
+-   Now swing the correlation between x2 and the missing x3 variable so there is a negative correlation. What happened to the parameter estimates? Which ones changed? Which direction did they change?
+
+-   Now set the $\beta_2$ to some moderate negative value. Now swing the correlation between x2 and the missing x3 variable between zero and positive correlation. What happened to the parameter estimates? Which ones changed? Which direction did they change?
+
+-   Now swing the correlation between x2 and the missing x3 variable between zero and some negative correlation. What happened to the parameter estimates? Which ones changed? Which direction did they change?
+
+# Including Omitted Variables
+
+We know from the reading that $R^2$ will increase when you add more variables. Lets take a look at what happens when you include variables that are not part of the population relationship. In other words, you started making a kitchen sink model.
+
+Lets start with a regression where $x_1$ and $x_2$ are used to explain $y$ but we are going to include some polynomial terms for $x_2$.
+
+The true population relationship is:
+
+$$y = \alpha + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_2^2 + \epsilon$$
+
+With $\alpha =1$, $\beta_1 =2$, $\beta_2 = 3$ and $\beta_3 = -.2$. We will start with this specification and then slowly add the irrelevant variables, additional powers of $x_2$. These new variables will be correlated with the other powers of $x_2$
+
+```{r}
+
+irrelevant_variable_data <- data.frame(
+  err = rnorm(200, sd = 3),
+  x1 = rnorm(200, mean = 1),
+  x2 = rnorm(200, mean = 2)
+) %>%
+  mutate(y = 1 + 2 * x1 + 3 * x2 - .2 * (x2^2) + err)
+
+
+
+```
+
+```{r echo=FALSE}
+# library(shiny)
+# library(ggplot2)
+# 
+# shinyApp(
+#   options = list(
+#     width = "100%", height = 700
+#   ),
+# 
+#   ui = fluidPage(
+#     sidebarLayout(
+#       sidebarPanel(
+# 
+#         sliderInput("Poly", "Degree Polynomial", min = 1, max = 20, value = 2, step = 1 )
+#       ),
+# 
+#       mainPanel(
+#         verbatimTextOutput("lm_result"),
+#         verbatiimTextOutput("corr_x2_polynomials")
+#       )
+#     )
+#   ),
+# 
+# 
+#   server = function(input, output) {
+# 
+# output$lm_result = renderPrint({
+#       irrelevant_variable_data %>%
+#         lm(y ~ x1 + poly(x2,input$Poly, raw = TRUE), data = .) %>%
+#         summary()
+#     }),
+# 
+# output$corr_x2_polynomials = renderPrint({
+#   cor(poly(irrelevant_variable_data$x2,input$Poly, raw = TRUE)) 
+# })
+#   }
+```
