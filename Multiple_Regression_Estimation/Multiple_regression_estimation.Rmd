@@ -185,7 +185,6 @@ simulated_multicollinear <- data.frame(
   )
 
 
-
 ```
 
 
