@@ -184,7 +184,7 @@ simulated_multicollinear <- data.frame(
     y = 2 + 3 * x1 + 5 * x2 + rnorm(100)
   )
 
-)
+
 
 ```
 
