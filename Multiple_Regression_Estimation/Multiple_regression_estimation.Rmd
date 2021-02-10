@@ -20,11 +20,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The book has solid description of the summation style least squares problem. It can get a little notation heavy for what you are doing. If you remember your linear algebra class, the matrix form is a little easier to grasp. The problem is to choose $\hat{\beta}$ such that the residuals term, $(y-\hat{\beta}x)$, when squared and added together, $(y-\hat{\beta}x)'(y-\hat{\beta}x)$ is minimized.
 
-$$\max_{\hat{\beta}}(y-\hat{\beta}x)'(y-\hat{\beta}x)$$
+$$\min_{\hat{\beta}}(y-\hat{\beta}x)'(y-\hat{\beta}x)$$
 
 Split this out so it is easier to work with and take the derivative.
 
-$$\max_{\hat{\beta}} y'y - 2\hat{\beta}x'y +\hat{\beta}^2 x'x\\
+$$\min_{\hat{\beta}} y'y - 2\hat{\beta}x'y +\hat{\beta}^2 x'x\\
 -2 x'y + 2 \hat{\beta} x'x = 0\\
 \hat{\beta} = (x'x)^{-1} x'y
 $$
@@ -167,65 +167,127 @@ Keep in mind that $x_1$ and $x_2$ are independent but you are in control of the 
 
 -   Now swing the correlation between x2 and the missing x3 variable between zero and some negative correlation. What happened to the parameter estimates? Which ones changed? Which direction did they change?
 
-# Including Omitted Variables
 
-We know from the reading that $R^2$ will increase when you add more variables. Lets take a look at what happens when you include variables that are not part of the population relationship. In other words, you started making a kitchen sink model.
+# Multicollinearity
 
-Lets start with a regression where $x_1$ and $x_2$ are used to explain $y$ but we are going to include some polynomial terms for $x_2$.
+Fancy word that means that some of your RHS variables are giving similar information as other RHS variables.  It manifests as a correlation between the variables.
 
-The true population relationship is:
+Lets generate some data simulated data -- no shiny toys this time.
 
-$$y = \alpha + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_2^2 + \epsilon$$
+```{r}
+library(tidyverse)
 
-With $\alpha =1$, $\beta_1 =2$, $\beta_2 = 3$ and $\beta_3 = -.2$. We will start with this specification and then slowly add the irrelevant variables, additional powers of $x_2$. These new variables will be correlated with the other powers of $x_2$
+simulated_multicollinear <- data.frame(
+  x1 = rnorm(100),
+  x2 = rnorm(100)) %>%  # create the y with mutate since you can't refer to other variables in this statement
+  mutate(
+    y = 2 + 3 * x1 + 5 * x2 + rnorm(100)
+  )
+
+)
+
+```
+
+
+Now that you have this data, run a regression and see if you get the correct parameter estimates.
 
 ```{r}
 
-irrelevant_variable_data <- data.frame(
-  err = rnorm(200, sd = 3),
-  x1 = rnorm(200, mean = 1),
-  x2 = rnorm(200, mean = 2)
-) %>%
-  mutate(y = 1 + 2 * x1 + 3 * x2 - .2 * (x2^2) + err)
+```
 
+Now lets try to include the same variable twice.  This is called perfect collinearity.  Modify the data frame so that there is a new variable x3 that is the same as x2 and then try to run a regression with y ~ x1 + x2 + x3.
 
+```{r}
 
 ```
 
-```{r echo=FALSE}
-# library(shiny)
-# library(ggplot2)
-# 
-# shinyApp(
-#   options = list(
-#     width = "100%", height = 700
-#   ),
-# 
-#   ui = fluidPage(
-#     sidebarLayout(
-#       sidebarPanel(
-# 
-#         sliderInput("Poly", "Degree Polynomial", min = 1, max = 20, value = 2, step = 1 )
-#       ),
-# 
-#       mainPanel(
-#         verbatimTextOutput("lm_result"),
-#         verbatiimTextOutput("corr_x2_polynomials")
-#       )
-#     )
-#   ),
-# 
-# 
-#   server = function(input, output) {
-# 
-# output$lm_result = renderPrint({
-#       irrelevant_variable_data %>%
-#         lm(y ~ x1 + poly(x2,input$Poly, raw = TRUE), data = .) %>%
-#         summary()
-#     }),
-# 
-# output$corr_x2_polynomials = renderPrint({
-#   cor(poly(irrelevant_variable_data$x2,input$Poly, raw = TRUE)) 
-# })
-#   }
++  What happened in the regression?  
+
+Now lets try creating a new variable, x4, that is strongly but not perfectly correlated with x2.
+
+```{r}
+simulated_multicollinear %>%
+  mutate( x4 = x2 + rnorm(100, sd = .01)) %>%
+  mutate(y = 2 + 3*x1 + 5*x2 + x4 + rnorm(100)) -> simulated_multicollinear
+
 ```
+
++ Walk through the code.  Does it make sense.
+
++ Plot the variables with  ggpairs() from the GGally library.  Do you see the multicolinearity?
+
+```{r}
+
+```
+
+
++ Run the regression y ~ x1 + x2.  Do the parameter estimates make sense given that you know how y was constructed?
+
+```{r}
+
+```
+
+
++ Run the regression y ~ x1 + x4.  Do the parameter estimates make sense given that you know how y was constructed?
+
+
+```{r}
+
+```
+
++ Run the regression y ~ x1 + x2 + x4.  What happened?
+
+```{r}
+
+```
+
+## Discussion
+
+Main points:
+
++ Data problem that is usually fixed with more data.
++ Technical fixes come later with dimension reduction techniques.
++ If you delete one you get omitted variable bias.
++ Think about  your variables as two kinds the ones you care about, and the others that are  just minor statistical controls.  Multicollinearity in the minor controls is not a big deal since you don't care about the parameter estimates just that you don't have ommited variable bias.  If it is in the ones you care about -- you need more data or more technique.
+
+
+# Play with some data
+
++ Load in the wage1 data set from the wooldridge library.
+
+```{r}
+
+```
+
++ Look at the variable descriptions, which are continuous variables?  There are some that are just zero or one.  These are generally referred to as dummy variables.  We will get to these in a chapter or two. Note that in many statistical languages the dummy variables are coded {1,0}.  In R we generally use TRUE/FALSE.
+
+```{r}
+
+```
+
+
++ Form a reasonable model of some kind.  This is your choice -- have fun.  Just make sure the parameters are of the right sign.
+
+```{r}
+
+```
+
++ Describe your model with summary or equivalent and some text.
+
+```{r}
+
+```
+
++ Now, try to induce multicollinearity by adding another variable or transforming, log, square, root, not scale, a variable.  How did you pick your variable?
+
+```{r}
+
+```
+
++ What happened?  What changed?
+
+
+
+
+
+

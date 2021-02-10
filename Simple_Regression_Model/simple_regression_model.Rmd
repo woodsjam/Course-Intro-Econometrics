@@ -512,7 +512,7 @@ server = function(input, output){
 
 + Set sigma to something reasonable and observe the $R^2$ and then vary the number of observations.  Does your $R^2$ change much?  What about the F statistic?
 
-+ Set the number of observatons to a moderate value, around 100, and then vary the standard deviation.  What do you observe?
++ Set the number of observations to a moderate value, around 100, and then vary the standard deviation.  What do you observe?
 
 # Changing Units
 
@@ -556,6 +556,12 @@ USArrests %>%
 Try this again on your own but instead of multiplying something on the right hand side, I want you to add 5 to the murder rate, the LHS variable.
 
 ```{r}
+USArrests %>%
+  mutate(UrbanPop_frac = UrbanPop/100) %>%
+  lm(I(Murder + 5) ~ UrbanPop_frac, data = .) %>%
+  summary()
+
+
 
 ```
 
@@ -570,8 +576,10 @@ Try this again on your own but instead of multiplying something on the right han
 Try it again but this time change the murder rate from murders per 100,000 to murders per 1,000.
 
 ```{r}
-
-
+USArrests %>%
+  mutate(UrbanPop_frac = UrbanPop) %>%
+  lm(I(Murder / 10000000) ~ UrbanPop_frac, data = .) %>%
+  summary()
 ```
 
 + What happened to the intercept term and variance?
@@ -605,11 +613,18 @@ The first derivative is positive and the second is negative, i.e., increasing at
 
 Try looking the linear-linear relationship between Murder and Assault. A one unit increase in assault, 1 per 100,000, is related to a $\beta_1$ increase in assaults per 100,000.  
 ```{r}
+USArrests %>%
+  lm(Murder ~ Assault , data = .) %>%
+  summary()
 
 ```
 
 Try looking the log-linear relationship between Murder and Assault. A one unit increase in assault, 1 per 100,000, is related to a $\beta_1$% increase in assaults per 100,000.  
 ```{r}
+USArrests %>%
+  lm(log(Murder) ~ Assault, data = .) %>%
+  summary()
+
 
 ```
 
@@ -617,12 +632,20 @@ Try looking the log-linear relationship between Murder and Assault. A one unit i
 Try looking the linear-log relationship between Murder and Assault. A one percent increase in assaults per 100,000, is related to a $\beta_1$ increase in assaults per 100,000.  
 ```{r}
 
+USArrests %>%
+  lm(Murder ~ log(Assault), data = .) %>%
+  summary()
+
 ```
 
 
 Try looking the log-log relationship between Murder and Assault. A one percent increase in assaults per 100,000, is related to a $\beta_1$% increase in assaults per 100,000.  
 
 ```{r}
+
+USArrests %>%
+  lm(log(Murder) ~ log(Assault), data = .) %>%
+  summary()
 
 ```
 
