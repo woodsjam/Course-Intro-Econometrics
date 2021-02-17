@@ -1,0 +1,306 @@
+---
+title: "The Multiple Regression Inference"
+author: "Jamie Woods"
+date: ""
+output: 
+  html_notebook
+
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidymodels)
+library(car)
+library(lmtest)
+
+#linearHypothesis()
+```
+
+
+# The Assumptions and What it Buys You.
+
+The hypotheses tests all depend on some assumptions about the residual terms. There are three major assumptions:  The residuals are normally distributed, the residuals are homoskedastic, there are lots and lots of observations.
+
+Normally distributed:  The assumption you are making when you use your maximum likelihood estimator.  Generally, your $\hat{\beta}$ estimates are Normally distributed.
+
+Homoscedasticity:  The residuals all have the same variance.  This is what you use with your least squares estimator.  Generally, your $\hat{\beta}$ estimates are distributed T, which gets closer and closer to Normal as the number of observations increase.
+
+Lots of Observations:  These are the asymptotic properties that we will talk about in late chapters.  The short reason is so many things turn out to be Normally distributed its ridiculous.  The [Central Limit Theorems](https://en.wikipedia.org/wiki/Central_limit_theorem) are beautiful.
+
+
+Don't let it freak you out that with the same data your distributions can have different distributions.  Your estimates are are combination of the data and the simplifying assumptions, including the functional form of your regression, you make.  These distributions are all contingent on the assumptions holding
+
+## Normal/Homoskedastic Assumptions Don't Always Hold but Close Enough.
+
+We use the assumptions to derive the sampling distributions of your parameter estimates, the $\hat{\beta}$s.  Most of the time the assumptions are close enough but often don't hold for a variety of reasons.
+
+
+
++ Load the data and run this regression using `lm`
+
+```{r}
+library(datasets)
+
+data("USArrests")
+
+lm_murder_pop <- lm(Murder ~ UrbanPop, data = USArrests)
+
+```
+
+
++ Plot $\sqrt{res}$ vs $\hat{y}$.  The $\sqrt{res}$ is meant to be like the standard deviation of the residuals.  The band should be the same for all $\hat{y}$. We did something similar in the estimation portion.  Is there a pattern?  Does it feel homoskedastic?
+
+```{r}
+library(tidyverse)
+
+```
+
+
++ Test if they residuals are distributed normally  with Shapiro-Wilk, `shapiro.test`.  
+
+
+
+Don't let this freak you out. You make assumptions to simplify computations and make it possible to draw inferences with smaller samples.  _One of your assumptions is your regression specification_.
+
+Many apparent statistical problems, like the ones above, with your regressions are often just misspecification errors, like using a log when you shouldn't.  You can't fix a bad specification with more sophisticated statistics.
+
+We have robust estimators, which adapt the confidence intervals after the fact for hetroskedasticity, `lm_robust` in the `library(estimatr)`package.  We will talk about this later.
+
+Last big warning.  If you have enough data -- everything is``statistically significant``.  That does not mean it has a ``practical`` or ``economic significances``.  Watch the quotes.  The term ``significant`` and ``significance`` is emotionally loaded.
+
+You -- knowing statistics -- may see both these as the same,``The program effect is insignificant``, ``The program effect is _statistically_ insignificant``, but the program manager heard that their program is insignificant.  They were just insulted and they have dug in their heels on feedback.
+
+You can also have circumstances where the parameter estimate is statistically different from zero, say that the program shows an increase in annual income of \$2, but \$2 is too little to have a practical or economic significance.  
+
+Equivocation is evil.
+
+
+# Testing with Individual $\hat{\beta}$
+
+This is what you are normally dealing with and the most common test you are interested is if you can reject the null hypothesis that $\hat{\beta} = 0$.  This is implicitly a two sided test, different than zero, not greater than.
+
+We have been reading our `summary(lm())` output at the p-values are listed for differences from zero.
+
+You may want to test if a parameter is different from something other than zero.  This does happen.  I use some statistically adjusted engineering models, where the engineers make guesses about energy use by end-use, say cooking for example, and we observe total monthly use.  We test if the parameter estimates are different than 1, which indicates that the engineers made bad guesses.
+
+Just for kicks lets check on our earlier murder regression and test if the parameter associated with UrbanPop, `r coef(lm_murder_pop)[2]`, is different from .05.
+
+```{r}
+
+# summary calculates a few values that we need.
+lm_murder_summary <- summary(lm_murder_pop)
+
+# Extract std error of estimate for beta
+UrbanPop_se <- lm_murder_summary$coefficients["UrbanPop","Std. Error"]
+
+# Find out how far away in standard deviations the estimate is from .05
+t_05 <- (.05 - lm_murder_summary$coefficients["UrbanPop","Estimate"])/UrbanPop_se
+
+# `pt` is the cdf of the t-distribution.  The t has a slightly different shape depending on the degrees of freedom, fewer means fatter tails.  The degrees of freedom in this case is residual degrees of freedom, observations less parameters in model.
+
+pt(t_05, df = lm_murder_summary$df[2])
+
+
+```
+
+
+
+# Nested Tests?
+
+Most of the time we will only be testing nested restrictions on the model.  What this means is that you have to be able to interpret your test as a restriction on you model.  
+
+Here are some examples.  Suppose you have a regression equation like this:
+
+$$y = \alpha + \beta_4 x_4 + \beta_4 x_4 +\beta_4 x_4 +\beta_4 x_4$$
+
+A nested test could be:
+
++ $\beta_1 = 0$, what your t-test usually does.
++ $\beta_1 = \beta_2 =0$, is a model without $x_1$ and $x_2$ different?
++ $\beta_2 = \beta_3$, are $\beta_2$ and $\beta_3$ different?
+
+Each represents a restriction on the parameter estimates and we have to discover if the constraint is statistically significant.
+
+There is some ability to perform non-nested tests comes later and the inferences are not unoquivical.  You often find that two models each tell part of the story.
+
+## F Tests
+
+The basics of an F test is that you are looking at the sum of squared residuals in two regressions, one that is not restricted and one that is.  The unrestricted one should have fewer sum of squared residuals.  Remember that this is $\chi^2$ and the other will be slightly higher.  You are checking to see if the restriction of not including those variables, which is the same as restricting the parameters to zero, results in a statistically significant increase in residual sum of squares.
+
++ Create another murder regression but use Assault, UrbanPop and Rape to explain murder.  Save the result of that regression.
+
++ Do the same for a restricted model that does not include Assualt and Rape.
+
++ Now perform an F-test, `anova(model2 , model1, test = "F" )` in R.  Was the restriction, NOT including the other variables, significant?
+
++ Now look at the F-test at the bottom of the summary output for model1.  That is a test between a model with only an intercept term and the model you specified.  What did you see?
+
+## General Restrictions
+
+You can do nested tests with simple zero restrictions with the F test.  This is what you do when you are including and excluding blocks of variables.
+
+The F Test looks at the difference in the sum of squared residuals between your two models and the sum of squared residuals in the unrestricted model.  The other model must nest within that model.  The numerator of the F-Test is distributed $\chi^2$ with degrees of freedom equal to the difference in degrees of freedom between the two models.  The denominator, which describes the distribution of the sum of squared residuals of the unrestricted model, is also $\chi^2$ with the degrees of freedom equal to the number of observations less the number of parameters in your regression model.
+
+# Bootstrap Logic
+
+Resampling is more common on the machine learning side, but is useful in econometrics too. The discussion below is about the naive bootstrap.  There are many bootstrap methods and specific problems you address with them.  The idea seems simple, because it is, and can help out sometime. 
+
+Be very careful.  
+
+
+The general idea of the bootstrap is that the population distribution is only directly observable through the samples that it gives you.  You can't ask for more, but you can pretend you can get new samples by resampling with replacement from the sample you have.
+
+So, suppose you have observations from a die of 2, 3, 3, 4, 5, 6.  Note that we have not seen a 1.  Try the code below a few times.  You will get a simulated new sample by resampling the old.
+
+```{r}
+sample(c(2, 3, 3, 4, 5, 6 ), 6, replace = TRUE)
+
+```
+
+
+
+That's great, you can fake new samples but you will never have a resample with the number 1 in it since you didn't observe it in the original sample.  You can even end up with samples of all the same number.
+
+Lets get a feel for how this works.  We are going to make some draws from a normal distribution.  Because we are in control of the data generating process, we will know the true population mean, zero, and standard deviation, 10.  What we want to know is what is the distribution of $\hat{\mu}$ our estimate of the mean of the distribution that we calculate from the sample.  
+
+Bootstrapping can take a little time, so I added a busy spinner to let you know that this was actually working.
+
+```{r echo=FALSE, warning=FALSE}
+library(shiny)
+library(ggplot2)
+library(shinybusy)
+
+map_mean <- function(split) mean(analysis(split)$x)
+
+
+
+shinyApp(
+  options = list(
+    width = "100%", height = 600
+  ),
+
+  ui = fluidPage(
+    sidebarLayout(
+      sidebarPanel(
+
+        sliderInput("sample_size", "Sample Size:", min = 2, max = 200, value = 20),
+
+        sliderInput("boot_samples", "Resamples:", min = 1, max = 1000, value = 40, step = 20 )
+      ),
+
+      mainPanel(
+        plotOutput("hist_plot_n_overlay")
+      )
+    ),
+    add_busy_spinner(spin = "fading-circle")
+  ),
+
+
+  server = function(input, output) {
+
+    simulated_data <- reactive({
+      data.frame(x = rnorm(n = input$sample_size, mean = 0, sd = sqrt(10)))
+    })
+
+    boot_means <- reactive({
+      set.seed(2354)
+      boots <- bootstraps(simulated_data(), times = input$boot_samples, apparent = TRUE)
+
+      boots %>%
+        mutate(mean_est = map(splits, map_mean)) %>%
+        select(mean_est) %>%
+        unnest()
+    })
+
+
+  output$hist_plot_n_overlay =
+    renderPlot({
+     boot_means() %>%
+        ggplot(aes(mean_est)) +
+        geom_histogram() +
+        stat_function(fun = dnorm, args = list(mean = mean(boot_means()$mean_est), sd = sd(boot_means()$mean_est)*input$boot_samples))
+    })
+  
+  output$mean = renderPrint({
+      head(boot_means(), 5)
+    })
+  }
+
+
+)
+```
+
+
+Try this out.
+
++ Set a large sample size, 200, and vary the resamples around.  Can you think of different uses for small and large numbers of bootstrap replicates?
+
++ Set a small sample size and vary the number of bootstrap replicates
+
+
+We can do something similar for regressions. This is called  bootstrapping the data.  The steps are:
+
++ Start with your data.
++ Decide on the number of times you will resample your data.  1000 is the most common number for confidence intervals.
++ Draw that many samples, _with replacement_, and run the same regression with each sample.
++ Record the $\hat{\beta}$ coefficients for each regression.  You can ignore the confidence intervals.
++  For your confidence intervals find the smallest interval that has $\alpha$ percent of the $\hat{\beta}$ estimates.
+
+
+There is some R and Tidyverse infrastructure to this.  It is primarily designed for machine learning but you can use it in this context.
+
+This sets up some infrastructure.
+
+```{r}
+
+library(tidymodels)
+
+set.seed(612) # Do this so you get the same random samples every time (replicable)
+
+# This draws a 1000 samples from the data with replacement.
+boots <- bootstraps(USArrests, times = 1000, apparent = TRUE)
+
+# Takes one of the bootstrap replicates from boots and gives back an lm model
+lm_murder <- function(split) {
+  lm(Murder ~ Assault  + UrbanPop, data = analysis(split))
+}
+
+```
+
+This should take a few seconds to run.  Bootstrapping can take a _very_ long time.  Do yourself a favor and always store bootstrap iterations.
+
+```{r}
+
+boot_models <-
+  boots %>%
+  mutate(model = map(splits, lm_murder),
+         coef_info = map(model, tidy))
+
+```
+
+Take a look at the bootstrap confidence intervals.
+
+```{r}
+int_pctl(boot_models, coef_info)
+
+```
+
+Now compare to the OLS ones.
+
+```{r}
+
+USArrests %>%
+  lm(Murder ~ Assault  + UrbanPop, data = . ) %>%
+  confint()
+
+```
+
+Notice anything?
+
+If you have a small enough data set, bootstraps are easy to do and don't take very long. If you have a large number of observations, don't be surprised if it takes weeks.
+

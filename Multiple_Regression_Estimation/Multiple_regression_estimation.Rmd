@@ -61,6 +61,7 @@ USArrests %>%
 But what we are going to do now is look at $\hat{y}$, the predicted number of murders per 100,000 and the difference between that number and actual. The blue line is just for reference, residuals should be zero on average. This is just an easy trick to get a blue line where I wanted it.
 
 ```{r}
+
 data.frame(Murder_hat = predict(lm_murder_pop),
            Resid = residuals(lm_murder_pop)) %>%
   ggplot(aes(y= Resid, x = Murder_hat)) +
@@ -191,13 +192,22 @@ simulated_multicollinear <- data.frame(
 Now that you have this data, run a regression and see if you get the correct parameter estimates.
 
 ```{r}
+simulated_multicollinear %>%
+  lm(y ~ x1 + x2, data = . ) %>%
+  summary()
+
 
 ```
 
 Now lets try to include the same variable twice.  This is called perfect collinearity.  Modify the data frame so that there is a new variable x3 that is the same as x2 and then try to run a regression with y ~ x1 + x2 + x3.
 
 ```{r}
+simulated_multicollinear <- simulated_multicollinear %>%
+  mutate( x3 = x2 )
 
+simulated_multicollinear %>%
+  lm( y ~ x1 + x2 + x3, data = .) %>%
+  summary()
 ```
 
 +  What happened in the regression?  
@@ -207,7 +217,7 @@ Now lets try creating a new variable, x4, that is strongly but not perfectly cor
 ```{r}
 simulated_multicollinear %>%
   mutate( x4 = x2 + rnorm(100, sd = .01)) %>%
-  mutate(y = 2 + 3*x1 + 5*x2 + x4 + rnorm(100)) -> simulated_multicollinear
+  mutate(y = 2 + 3 * x1 + 5 * x2 + 1 * x4 + rnorm(100)) -> simulated_multicollinear
 
 ```
 
@@ -216,13 +226,20 @@ simulated_multicollinear %>%
 + Plot the variables with  ggpairs() from the GGally library.  Do you see the multicolinearity?
 
 ```{r}
+library(GGally)
 
+simulated_multicollinear %>%
+  ggpairs()
 ```
 
 
 + Run the regression y ~ x1 + x2.  Do the parameter estimates make sense given that you know how y was constructed?
 
 ```{r}
+
+simulated_multicollinear %>%
+  lm( y ~ x1 + x2, data = .) %>%
+  summary()
 
 ```
 
@@ -232,13 +249,28 @@ simulated_multicollinear %>%
 
 ```{r}
 
+simulated_multicollinear %>%
+  lm( y ~ x1 + x4, data = .) %>%
+  summary()
+
 ```
 
 + Run the regression y ~ x1 + x2 + x4.  What happened?
 
 ```{r}
-
+simulated_multicollinear %>%
+  lm( y ~ x1 + x2 +  x4, data = .) %>%
+  summary()
 ```
+
++ Peek at the variance covariance matrix of your $\hat{\beta}$ estimates.  Note that the diagonal is the variance, standard deviation from above squared, and the covariance between the parameter estimates, yes the whole thing is joint normal, are on the off diagonal.  See anything odd?
+
+```{r}
+simulated_multicollinear %>%
+  lm( y ~ x1 + x2 +  x4, data = .) %>%
+  vcov()
+```
+
 
 ## Discussion
 
@@ -247,7 +279,7 @@ Main points:
 + Data problem that is usually fixed with more data.
 + Technical fixes come later with dimension reduction techniques.
 + If you delete one you get omitted variable bias.
-+ Think about  your variables as two kinds the ones you care about, and the others that are  just minor statistical controls.  Multicollinearity in the minor controls is not a big deal since you don't care about the parameter estimates just that you don't have ommited variable bias.  If it is in the ones you care about -- you need more data or more technique.
++ Think about  your variables as two kinds the ones you care about, and the others that are  just minor statistical controls.  Multicollinearity in the minor controls is not a big deal since you don't care about the parameter estimates just that you don't have omitted variable bias.  If it is in the ones you care about -- you need more data or more technique.
 
 
 # Play with some data
@@ -255,12 +287,24 @@ Main points:
 + Load in the wage1 data set from the wooldridge library.
 
 ```{r}
+library(wooldridge)
 
+data("wage1")
 ```
 
 + Look at the variable descriptions, which are continuous variables?  There are some that are just zero or one.  These are generally referred to as dummy variables.  We will get to these in a chapter or two. Note that in many statistical languages the dummy variables are coded {1,0}.  In R we generally use TRUE/FALSE.
 
 ```{r}
+
+wage1 %>%
+  select(wage, 
+         educ, 
+         tenure, 
+         exper, 
+         lwage, 
+         expersq, 
+         tenursq) -> wage1_cont_subset
+
 
 ```
 
