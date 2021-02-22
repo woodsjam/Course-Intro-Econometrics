@@ -76,7 +76,7 @@ shapiro.test(residuals(lm_murder_pop))
 ```
 
 
-
+I picked this test because it is very efficient. Keep in mind that as with most tests, when you add more data you will eventually reject the null hypothesis that the residuals are normally distributed.
 
 Don't let this freak you out. You make assumptions to simplify computations and make it possible to draw inferences with smaller samples.  _One of your assumptions is your regression specification_.
 
@@ -147,6 +147,8 @@ The basics of an F-test is that you are looking at two regressions, one that is 
 You are checking to see if the restriction results in a statistically significant increase in residual sum of squares.  The F-test looks at the ratio of that difference  and the residual sum of squares of the unrestricted model.  _Basically its a statistical way of seeing if the percent change in the sum of squared residuals is statistically different from zero._  
 
 The numerator and denominator are both distributed $\chi^2$, so the ratio is distributed F.  The degrees of freedom of the numerator is just the difference in residual degrees of freedom between the restricted and unrestricted model. The denominator has residual degrees of freedom as the unrestricted model.
+
+You can also test with the inverse and some statistical software does that.  Just make sure to check both the value of the F-test and the p-value to make sure you are interpreting it correctly.
 
 + Create another murder regression but use Assault, UrbanPop and Rape to explain murder.  Save the result of that regression.
 
