@@ -18,7 +18,7 @@ library(tidymodels)
 library(car)
 library(lmtest)
 
-#linearHypothesis()
+
 ```
 
 
@@ -30,14 +30,14 @@ Normally distributed:  The assumption you are making when you use your maximum l
 
 Homoscedasticity:  The residuals all have the same variance.  This is what you use with your least squares estimator.  Generally, your $\hat{\beta}$ estimates are distributed T, which gets closer and closer to Normal as the number of observations increase.
 
-Lots of Observations:  These are the asymptotic properties that we will talk about in late chapters.  The short reason is so many things turn out to be Normally distributed its ridiculous.  The [Central Limit Theorems](https://en.wikipedia.org/wiki/Central_limit_theorem) are beautiful.
+Lots of Observations:  These are the asymptotic properties in the chapter we skip.  The short reason this works is that so many things turn out to be Normally distributed its ridiculous.  The [Central Limit Theorems](https://en.wikipedia.org/wiki/Central_limit_theorem) are beautiful.
 
 
-Don't let it freak you out that with the same data your distributions can have different distributions.  Your estimates are are combination of the data and the simplifying assumptions, including the functional form of your regression, you make.  These distributions are all contingent on the assumptions holding
+Don't let it freak you out that with the same data but that the coefficients that you estimate can have different distributions.  Your estimates are are combination of the data and the simplifying assumptions, including the functional form of your regression, you make.  These distributions are all contingent on the assumptions holding
 
-## Normal/Homoskedastic Assumptions Don't Always Hold but Close Enough.
+## Normal/Homoskedastic Assumptions Don't Always Hold, But Are Close Enough.
 
-We use the assumptions to derive the sampling distributions of your parameter estimates, the $\hat{\beta}$s.  Most of the time the assumptions are close enough but often don't hold for a variety of reasons.
+We use the assumptions to derive the sampling distributions of your parameter estimates, the $\hat{\beta}$s.  Most of the time the assumptions are close enough but often don't hold _exactly_ for a variety of reasons.
 
 
 
@@ -58,10 +58,23 @@ lm_murder_pop <- lm(Murder ~ UrbanPop, data = USArrests)
 ```{r}
 library(tidyverse)
 
+data.frame( yhat = predict(lm_murder_pop),
+            sqrt_resid = sqrt( abs(residuals(lm_murder_pop))))  %>%
+  ggplot( aes(y =sqrt_resid, x = yhat)) +
+  geom_point() + 
+  geom_smooth()
+
 ```
 
 
 + Test if they residuals are distributed normally  with Shapiro-Wilk, `shapiro.test`.  
+
+```{r}
+
+shapiro.test(residuals(lm_murder_pop))
+
+```
+
 
 
 
@@ -75,20 +88,20 @@ Last big warning.  If you have enough data -- everything is``statistically signi
 
 You -- knowing statistics -- may see both these as the same,``The program effect is insignificant``, ``The program effect is _statistically_ insignificant``, but the program manager heard that their program is insignificant.  They were just insulted and they have dug in their heels on feedback.
 
-You can also have circumstances where the parameter estimate is statistically different from zero, say that the program shows an increase in annual income of \$2, but \$2 is too little to have a practical or economic significance.  
+You can also have circumstances where the parameter estimate is statistically different from zero, you have rejected that null hypothesis, but that the program shows an increase in annual income of \$2.  \$2 is too little to have a practical or economic significance.  
 
 Equivocation is evil.
 
 
 # Testing with Individual $\hat{\beta}$
 
-This is what you are normally dealing with and the most common test you are interested is if you can reject the null hypothesis that $\hat{\beta} = 0$.  This is implicitly a two sided test, different than zero, not greater than.
+This is what you are normally dealing with, and is the most common test. You are interested is if you can reject the null hypothesis that $\hat{\beta} = 0$.  This is implicitly a two-sided test, meaning different than zero.
 
 We have been reading our `summary(lm())` output at the p-values are listed for differences from zero.
 
-You may want to test if a parameter is different from something other than zero.  This does happen.  I use some statistically adjusted engineering models, where the engineers make guesses about energy use by end-use, say cooking for example, and we observe total monthly use.  We test if the parameter estimates are different than 1, which indicates that the engineers made bad guesses.
+You may want to test if a parameter is different from something other than zero.  This does happen.  I use some statistically adjusted engineering models, where the engineers make guesses about energy use by end-use, say cooking for example, and we observe total monthly use.  We test if the parameter estimates are different than 1.  Rejecting that null indicates that the engineers made bad guesses.
 
-Just for kicks lets check on our earlier murder regression and test if the parameter associated with UrbanPop, `r coef(lm_murder_pop)[2]`, is different from .05.
+Just for kicks, lets check on our earlier murder regression and test if the parameter associated with UrbanPop, `r coef(lm_murder_pop)[2]`, is different from .05.
 
 ```{r}
 
@@ -109,14 +122,13 @@ pt(t_05, df = lm_murder_summary$df[2])
 ```
 
 
-
 # Nested Tests?
 
-Most of the time we will only be testing nested restrictions on the model.  What this means is that you have to be able to interpret your test as a restriction on you model.  
+Most of the time we will only be testing nested restrictions on the model.  What this means is that you have to be able to interpret your test as a restriction on you model.  Not including variables is the equivalent of restricting their coefficient estimates to zero.  You can also restrict coefficients to be the same and many other combinations.
 
 Here are some examples.  Suppose you have a regression equation like this:
 
-$$y = \alpha + \beta_4 x_4 + \beta_4 x_4 +\beta_4 x_4 +\beta_4 x_4$$
+$$y = \alpha + \beta_1 x_1 + \beta_2 x_2 +\beta_3 x_3 +\beta_4 x_4$$
 
 A nested test could be:
 
@@ -126,15 +138,19 @@ A nested test could be:
 
 Each represents a restriction on the parameter estimates and we have to discover if the constraint is statistically significant.
 
-There is some ability to perform non-nested tests comes later and the inferences are not unoquivical.  You often find that two models each tell part of the story.
+There is some ability to perform non-nested tests, which we will see later. The inferences are not unequivocal.  You often find that two models each tell part of the story.
 
 ## F Tests
 
-The basics of an F test is that you are looking at the sum of squared residuals in two regressions, one that is not restricted and one that is.  The unrestricted one should have fewer sum of squared residuals.  Remember that this is $\chi^2$ and the other will be slightly higher.  You are checking to see if the restriction of not including those variables, which is the same as restricting the parameters to zero, results in a statistically significant increase in residual sum of squares.
+The basics of an F-test is that you are looking at two regressions, one that is not restricted and one that is.  The unrestricted one should have a smaller sum of squared residuals.  
+
+You are checking to see if the restriction results in a statistically significant increase in residual sum of squares.  The F-test looks at the ratio of that difference  and the residual sum of squares of the unrestricted model.  _Basically its a statistical way of seeing if the percent change in the sum of squared residuals is statistically different from zero._  
+
+The numerator and denominator are both distributed $\chi^2$, so the ratio is distributed F.  The degrees of freedom of the numerator is just the difference in residual degrees of freedom between the restricted and unrestricted model. The denominator has residual degrees of freedom as the unrestricted model.
 
 + Create another murder regression but use Assault, UrbanPop and Rape to explain murder.  Save the result of that regression.
 
-+ Do the same for a restricted model that does not include Assualt and Rape.
++ Do the same for a restricted model that does not include Assault and Rape.
 
 + Now perform an F-test, `anova(model2 , model1, test = "F" )` in R.  Was the restriction, NOT including the other variables, significant?
 
@@ -142,16 +158,86 @@ The basics of an F test is that you are looking at the sum of squared residuals 
 
 ## General Restrictions
 
-You can do nested tests with simple zero restrictions with the F test.  This is what you do when you are including and excluding blocks of variables.
+You can do nested tests with simple zero restrictions with the F test.  This is what you do when you are including and excluding blocks of variables.  You can compare the different regression models with the `anova` function shown above or use the `linearHypothesis()` function in the `car` library.
 
-The F Test looks at the difference in the sum of squared residuals between your two models and the sum of squared residuals in the unrestricted model.  The other model must nest within that model.  The numerator of the F-Test is distributed $\chi^2$ with degrees of freedom equal to the difference in degrees of freedom between the two models.  The denominator, which describes the distribution of the sum of squared residuals of the unrestricted model, is also $\chi^2$ with the degrees of freedom equal to the number of observations less the number of parameters in your regression model.
+# Non-Nested Tests
+
+The book has some explanation of non-nested tests but there is an additional regression _based_ test that is very interesting.  Its called the J-Test and it allows you to compare two non-nested models.
+
+Lets go back to our murder regressions and try two non-nested models.
+```{r}
+library(lmtest)
+library(wooldridge)
+data("USArrests")
+lm_murder_pop <- lm(Murder ~ UrbanPop, data = USArrests)
+
+lm_aug <- lm(Murder ~  Assault, data = USArrests)
+
+```
+
+You notice that the two models don't nest.  Both the models could be thought of as restriced versions of  `lm(Murder ~  Assault + UrbanPop, data = USArrests)`, but we aren't testing that right now.
+
+What the J-Test does is that it augments each regression with the forecasted LHS of the other equation.  The chunk below adds the augmented forecasts of the LHS variable to the data frame.
+
+```{r}
+USArrests %>%
+  mutate(Yhat_pop = predict(lm_murder_pop),
+         Yhat_aug = predict(lm_aug)) -> USArrests
+
+```
+
+
+Then you run the augmented regressions, ignoring all the t-tests except the one associated with the forecast from the other model.
+
+```{r}
+lm_murder_pop_J <- lm(Murder ~ UrbanPop + Yhat_aug, data = USArrests)
+
+lm_aug_J <- lm(Murder ~  Assault + Yhat_pop, data = USArrests)
+
+```
+
+Then look at the t-test for the forecast from the other variable.
+
+```{r}
+summary(lm_murder_pop_J)
+
+```
+
+
+```{r}
+summary(lm_aug_J)
+```
+If the t-test is significant it says that you reject the null hypothesis that the other model had no additional explanatory power.  This is a cool situation where both models have something to teach the other.
+
+You don't have to do the J-Test by hand.  There is a built-in function that does it.
+
+```{r}
+library(lmtest)
+
+jtest(lm_murder_pop, lm_aug)
+```
+
+What is interesting about the J-Test is that it fails when the models _are_ nested.  Consider these two models similar to the ones above.
+
+```{r}
+lm_murder_pop <- lm(Murder ~ UrbanPop, data = USArrests)
+lm_murder_unrestricted <- lm(Murder ~ UrbanPop + Assault, data = USArrests)
+
+```
+
+Notice that the model in lm_murder_pop is nested in lm_murder_unrestricted.  It just restricts the Assault parameter to zero. When you try to augment lm_murder_unrestricted with the forecast of the other model you are adding a variable that is a linear combination of the variables already included.  You just created perfect multicolinearity.  The test can't be computed because the regression can't be estimated.
+
+```{r}
+jtest(lm_murder_pop, lm_murder_unrestricted)
+```
+
+Notice that the forecast of the second model can be used in the first but the forecast of the first model can't be used in the second.  That new variable is just $6.41594 + 0.02093 UrbanPop$, a linear combination of the existing variables.
 
 # Bootstrap Logic
 
 Resampling is more common on the machine learning side, but is useful in econometrics too. The discussion below is about the naive bootstrap.  There are many bootstrap methods and specific problems you address with them.  The idea seems simple, because it is, and can help out sometime. 
 
 Be very careful.  
-
 
 The general idea of the bootstrap is that the population distribution is only directly observable through the samples that it gives you.  You can't ask for more, but you can pretend you can get new samples by resampling with replacement from the sample you have.
 
@@ -278,8 +364,8 @@ This should take a few seconds to run.  Bootstrapping can take a _very_ long tim
 
 boot_models <-
   boots %>%
-  mutate(model = map(splits, lm_murder),
-         coef_info = map(model, tidy))
+  mutate(model = map(splits, lm_murder),    # Runs lm for each replicate
+         coef_info = map(model, tidy))    # extracts the coefficients from each lm model
 
 ```
 
@@ -300,7 +386,10 @@ USArrests %>%
 
 ```
 
-Notice anything?
+Notice anything?  Remember that these are poorly specified models.  This may not be a statistical problem but a specification problem that looks like a statistical problem.
 
-If you have a small enough data set, bootstraps are easy to do and don't take very long. If you have a large number of observations, don't be surprised if it takes weeks.
+An experienced eye would see the difference being mostly in the intercept term as being evidence that you are missing a dummy variable -- a categorical attribute -- like high density.  I would take a look at the plots and see which states are causing the problem.
+
+
+If you have a small enough data set, bootstraps are easy to do and don't take very long. *If you have a large number of observations, don't be surprised if it takes weeks.*
 

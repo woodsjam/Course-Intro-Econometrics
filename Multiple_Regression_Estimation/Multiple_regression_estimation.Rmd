@@ -301,9 +301,8 @@ wage1 %>%
          educ, 
          tenure, 
          exper, 
-         lwage, 
-         expersq, 
-         tenursq) -> wage1_cont_subset
+         numdep
+         ) -> wage1_cont_subset
 
 
 ```
@@ -312,6 +311,11 @@ wage1 %>%
 + Form a reasonable model of some kind.  This is your choice -- have fun.  Just make sure the parameters are of the right sign.
 
 ```{r}
+
+wage1_cont_subset %>%
+  lm(wage ~ educ+exper+tenure, data=.) %>%
+  summary()
+
 
 ```
 
@@ -325,6 +329,9 @@ wage1 %>%
 
 ```{r}
 
+wage1_cont_subset %>%
+  lm(wage ~ educ + log(exper+1) + exper + tenure, data=.) %>%
+  summary()
 ```
 
 + What happened?  What changed?
