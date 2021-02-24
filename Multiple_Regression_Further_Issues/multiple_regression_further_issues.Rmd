@@ -11,7 +11,7 @@ runtime: shiny
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Forecasting
+# Forecasting (We will return to this)
 
 + Confidence intervals for prediction.  
 + How to implement with regression 
@@ -28,7 +28,15 @@ The idea is to subtract the mean from the data series -- so the new mean is zero
 
 + Build a simple function called `znorm` that will take data, calculate the mean and standard deviation, then calculate the normalized value $\frac{x_i - \hat{\mu_x}}{\hat{\sigma_x}}$ and return that data
 ```{r}
-znorm <- function(x) { }
+znorm <- function(x) { 
+    mu <- mean(x, na.rm = TRUE)
+    sigma <- sd(x, na.rm = TRUE)
+    
+    (x - mu)/sigma
+  }
+
+
+
 ```
 
 + `mutate` Murder, Assault and UrbanPop with your function and add them to the USAArrests data.frame.
@@ -37,7 +45,13 @@ znorm <- function(x) { }
 library(tidyverse)
 library(wooldridge)
 data("USArrests")
-USArrests <- USArrests 
+
+
+USArrests <- USArrests %>%
+  mutate(murder_x = znorm(Murder),
+         assault_x = znorm(Assault),
+         urbanpop_x = znorm(UrbanPop))
+
 
 
 ```
@@ -45,12 +59,19 @@ USArrests <- USArrests
 + Form a murder regression with your new variables, or make them on the fly with your new function and the `I()` function, and show the results with `summary`.
 
 ```{r}
+lm(murder_x ~  assault_x + urbanpop_x, data = USArrests) %>%
+  summary()
+
 
 ```
 
 + What is up with the intercept?  Try a similar regression without an intercept, i.e., add a `-1` to your formula in the `lm` function, and discuss.  How comfortable are you with some of the parameter estimates changing?
 
 ```{r}
+```{r}
+lm(murder_x ~ -1 +  assault_x + urbanpop_x, data = USArrests) %>%
+  summary()
+
 
 ```
 
@@ -65,6 +86,7 @@ This is generally not much of a problem, but you can only take a log of a strict
 The most basic trick is to add one to the variable before you log it.  Take for example `data("apple")` in the `wooldridge` library.  Load it in and take a look at the variables and the data dictionary.
 
 ```{r}
+data("apple")
 
 ```
 
@@ -74,8 +96,9 @@ Try to estimate a demand function for regular apples as a function of the prices
 
 ```{r}
 apple %>%
-  lm(log(reglbs+.01) ~ log(regprc) + log(ecoprc) + log(faminc), data = .) %>%
+  lm(log(reglbs + 1) ~ log(regprc) + log(ecoprc) + log(faminc), data = .) %>%
   summary()
+
 
 ```
 
@@ -88,7 +111,9 @@ You should get an error.  Now change the LHS to `log(reglbs + 1)` and look at th
 Try it again but this time use `log(reglbs + .02)`.
 
 ```{r}
-
+apple %>%
+  lm(log(reglbs + .02) ~ log(regprc) + log(ecoprc) + log(faminc), data = .) %>%
+  summary()
 ```
 
 Do you trust this?  How sensitive were your results to this very minor assumption of how to transform a variable?
@@ -216,7 +241,44 @@ Now run these regressions and lets sort out the interpretation of each of the pa
 
 
 + Common change in years married relation with age with different intercepts by religiosity.
+
+```{r}
+affairs %>%
+  mutate(Religious = recode_factor(relig, "1" = "Anti",
+                                      "2" = "Not",
+                                      "3" = "Avg",
+                                      "4" = "Somewhat",
+                                      "5" = "Very")
+            ) %>%
+  lm(yrsmarr ~ age + Religious, data =  . ) %>%
+  summary()
+
+```
+
+
+intercept -- the years that someone that is zero years old and is anti-religious would be married. 
+
+age -- The increase in years married for every increase in age.
+
+ReligiousNot -- The increase in the number of years married relative to an anti-religious person.
+
+ReligiousAvg -- The increase in the number of years married relative to an anti-religious person
+
 + Common intercept but different relationship between age and years married by religiosity.
+
+```{r}
+affairs %>%
+  mutate(Religious = recode_factor(relig, "1" = "Anti",
+                                      "2" = "Not",
+                                      "3" = "Avg",
+                                      "4" = "Somewhat",
+                                      "5" = "Very")
+            ) %>%
+  lm(yrsmarr ~ age : Religious, data =  . ) %>%
+  summary()
+
+```
+
 + Both the intercepts and the relationship between age and years married differ by religiosity.
 
 
