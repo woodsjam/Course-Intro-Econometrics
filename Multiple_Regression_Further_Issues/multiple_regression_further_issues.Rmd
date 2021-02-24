@@ -1,0 +1,241 @@
+---
+title: "Multiple Regression: Further Issues"
+author: "Jamie Woods"
+date: 
+output: 
+  html_notebook: 
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Forecasting
+
++ Confidence intervals for prediction.  
++ How to implement with regression 
++ R code and why it looks that way
+
+
+# Scaling Variables
+
+We already discussed some scaling issues related to convergence and demonstrated how to alter the scale so the parameter estimates are more reasonable, but there is one more scaling issue.
+
+Sometimes you want to be able to clearly show that one parameter is more important or has a larger effect than the others.  The problem is that you can can change the scale of your parameter estimates just by rescaling the data.  You need a reasonable way of scaling all the variables in your model so that they are in some sense comparable. That is difficult when some variables are in pounds and others are in inches.  
+
+The idea is to subtract the mean from the data series -- so the new mean is zero.  Then you use the standard deviation as the metric.  What you measure is how many standard deviations each observation is away from the mean.  If the standard deviation is large, the variable has to move a lot.
+
++ Build a simple function called `znorm` that will take data, calculate the mean and standard deviation, then calculate the normalized value $\frac{x_i - \hat{\mu_x}}{\hat{\sigma_x}}$ and return that data
+```{r}
+znorm <- function(x) { }
+```
+
++ `mutate` Murder, Assault and UrbanPop with your function and add them to the USAArrests data.frame.
+
+```{r}
+library(tidyverse)
+library(wooldridge)
+data("USArrests")
+USArrests <- USArrests 
+
+
+```
+
++ Form a murder regression with your new variables, or make them on the fly with your new function and the `I()` function, and show the results with `summary`.
+
+```{r}
+
+```
+
++ What is up with the intercept?  Try a similar regression without an intercept, i.e., add a `-1` to your formula in the `lm` function, and discuss.  How comfortable are you with some of the parameter estimates changing?
+
+```{r}
+
+```
+
+
+# Functional Forms
+
+We talk a lot about taking logs of both our RHS and LHS variables.  The book has a good discussion, but we should talk about a few problems.
+
+This is generally not much of a problem, but you can only take a log of a strictly positive number.  If you have negative numbers, don't log.  Dealing with zeros is a much more common problem.  
+
+
+The most basic trick is to add one to the variable before you log it.  Take for example `data("apple")` in the `wooldridge` library.  Load it in and take a look at the variables and the data dictionary.
+
+```{r}
+
+```
+
+Notice that some of the continuous variables have zeros.  The real problem happens when the zeros are common. In this data set a lot of people did not buy apples.  We will show you what goes wrong with the log approach with this data.
+
+Try to estimate a demand function for regular apples as a function of the prices of both regular and eco labeled apples, and income.  Make this a log-log specification so that the parameter estimates are interpretable as elasticities. 
+
+```{r}
+apple %>%
+  lm(log(reglbs+.01) ~ log(regprc) + log(ecoprc) + log(faminc), data = .) %>%
+  summary()
+
+```
+
+You should get an error.  Now change the LHS to `log(reglbs + 1)` and look at those results.
+
+```{r}
+
+```
+
+Try it again but this time use `log(reglbs + .02)`.
+
+```{r}
+
+```
+
+Do you trust this?  How sensitive were your results to this very minor assumption of how to transform a variable?
+
+The real way we handle this is with something called a Tobit model.  It is beyond the scope of the course but you can find this in Ch 17 of your book.  Essentially it estimates two models, the first, did you buy any apples, and the second, given that you did, how many.  The other approach is a Poisson regression, which has nothing to do with fish or arsenic, but is used when the LHS are smallish count data.
+
+
+## More on the LHS and Logs
+
++ The cool idea of exponentiation does not work. When you exponentiate the residual it has a mean of about $\frac{\sigma^2}{2}$
++ In normal assumption land, the errors are actually log-normal and the mean of that is greater than zero.  That is where the $\frac{\sigma^2}{2}$ comes from, that is the mean of a log-normal distribution with mean zero and SD sigma.
++ In least squares land you create a similar smearing estimator to find the expansion.  Find the average of the e^residuals and multiply that by exp(yhat).  This is consistent but not unbiased.
++ If you want an R square, find the correlation between y and yhat, yes both are not logged, and square that.  That is literally R^2.  You can compare the ln(y) and y on lhs cases then.
++ There is a good simple but non-nested test that should feel very similar to the J-Test called the PE test, `lmtest::petest`.  This is another one of the regression based tests that I love.
+
+## Log(LHS) can also make your residuals more likely to be homoskedastic
+
++ This is a classic reason to transform your LHS variable.
++ If you notice that when you plot yhat vs the square root of residuals that it looks heteroscedastic, the log my stabilize this.  Roughly, you are changing the residual term from being unit differences to being percent differences.
++ If you don't feel like plotting, do a Breusch–Pagan test, `lmtest::bptest()`.  The logic is pretty cool.  Keep in mind that BP when you reject the null, says there is a linear relationship between the RHS variables and standard error.  It does not say that it increases.  
+
+
+
+# Polynomials to Approximate Complex Functions
+
++ You can approximate just about anything with a polynomial approximation.  You may remember this from Calc II.  
++ If you use polynomials -- you will have a max or min if signs alternate. Should that be true for what you are trying to model?  If it isn't, make sure that the min or the max is beyond the range of the data, if not, you will have an interpretation problem.
++ Polynomial approximations in one dimension.  To give an idea of notation and how it works.   Point out limitations with it creating multicolinearity.  Show the vcov matrix.
++ F-test when you have polynomials is key because of multicolinearity.  You don't test just the squared term.  All the polynomials of a variable should be in the F-test.
+
+# Interactions and How to Interpret Them
+
+# Categorical Variables
+
+Sometimes you would like to include RHS variables that are not real-valued but that indicate a characteristic, like eye color or gender.  These are for historical reasons called dummy variables.
+
+Pull up data("affairs") and take a look at the variable descriptions with help('affairs').  There are a lot of categorical variables, `male` is a 1 if male and 0 if not male (If you check the publication year you can guess that you were only allowed M/F then).  
+
+We are going to misuse this data to indicate how to use dummy variables on the RHS.  None of these models make sense in any reasonable way, but later when we put a categorical variable on the LHS and use the linear probability model, it will shine.
+
+There is also a variable called `relig` and another called `ratemarr`.  Both of these variables are coded on a likert or agreement scale.  The numbers indicate the degree of agreement.  "On a scale of 1 to five with one being very unhappy and 5 being very happy." Technically this is an ordinal scale; you can tell direction but we will treat this as categorical.
+
+The data you see is intended for use by something other than R.  There are associated variables, called a _dummy variable series_, that splits one of these likert scale columns into more columns.  Notice these variables in the data dictionary, vryrel:relig == 5, smerel: relig == 4, slghtrel: relig == 3,notrel: relig == 2.  They have a one if the person gave that response and a zero if they did not.
+
+R has a different way of defining and using categorical variables that is a lot easier they are referred to as "factors".  We will use both the usual dummy variable series and the R way so you can see the differences.
+
+Lets put yrsmarr, years married, on the LHS so we have a continuous variable and try to explain that with age and religiosity.
+
+The general, non-R way of handling the dummy variable series is to pick one as the _excluded case_. That case will be bound up in the intercept.  
+
+```{r}
+data('affairs')
+
+affairs %>% 
+  lm(yrsmarr ~ age + vryrel + smerel + slghtrel + notrel, data = .) %>%
+  summary()
+
+```
+
+The intercept term is interpreted as someone that is zero years old and is anti religious, a one on the likert scale.  The other religiousity parameters have interpretations.  The coefficient associated with vryrel shows the expected additional years a respondent would be married than a respondent that said they were anti-religious, a 1 on the likert scale.
+
+We can also handle this the R way.  The problem is that the column that describes their response `relig` looks real valued.  You have to tell R that these should be treated as factors.  If you run this it treats religiosity as a real-valued variable.
+
+```{r}
+affairs %>% 
+  lm(yrsmarr ~ age + relig, data = .) %>%
+  summary()
+
+
+```
+
+
+Try this:
+
+```{r}
+affairs %>% 
+  lm(yrsmarr ~ age + as.factor(relig), data = .) %>%
+  summary()
+```
+
+Make a comparison with the dummy variable series result.  They should be the same.
+
+You can make it a little easier to read by recodeing the variable.  Old school languages preferred data to be numeric so it could fit in a matrix data structure.  Modern languages don't always have this restriction, but data often comes in this form.  We often recode the data so don't have to keep the data dictionary on hand.
+
+```{r}
+
+affairs %>%
+  mutate(Religious = recode_factor(relig, "1" = "Anti",
+                                      "2" = "Not",
+                                      "3" = "Avg",
+                                      "4" = "Somewhat",
+                                      "5" = "Very")
+            ) %>%
+  lm(yrsmarr ~ age + Religious, data =  . ) %>%
+  summary()
+```
+
+That should be a little easier to understand. Please note that lm picked anti as the left out category.  The intercept is still the length of marriage of someone that is zero years old and anti-religious.
+
+There is one final point that is often skipped, which is ironic because I will mostly skip it and have skipped it.  Your left-out category should be be chosen one of two different ways.  It should be the one with the most responses, or the bottom/top of the scale if ordinal. 
+
+Choosing the category with the largest number of observations will make the standard error of the intercept term smaller and that will make it easier to tell if the other values are different from it.  Choosing the lowest ordinal value will make the model easier to explain.  Figuring out what the intercept term represents is frequently tricky and this helps.
+
+Lets abuse the affair data again and expand on our poor model.  Keep in mind that this is a terrible model.  There is no logic to it.
+
+The way we specified the model before we found a common relationship between age and the number of years someone had been married that is the same for religious and non-religious.  In short, we found the slope of a common line but allowed the intercept to differ depending on religiosity.
+
+The basic patterns are:
+
++ Common slope with different intercepts (Which we did)
++ Common intercept with different slopes
++ Common intercepts and slopes (Exclude the dummies)
++ Different slopes and intercepts (Like a separate regression for each category but with a twist)
+
+
+Remember that the formula notation for interaction in R is a little odd. Given variables h and n:
+
++ h + n is $\beta_h  h + \beta_n n$
++ h:n is $\beta_{h~cross~n} h n$
++ h*n is $\beta_h  h + \beta_n n + \beta_{h~cross~n} h n$
++ h + h:n is $\beta_h h  + \beta_{h~cross~n} h n$
+
+
+Now run these regressions and lets sort out the interpretation of each of the parameters.  *You should take some pretty close notes on how we describe these parameters.*  We will also learn when excluding the intercept or something similar is useful.
+
+
++ Common change in years married relation with age with different intercepts by religiosity.
++ Common intercept but different relationship between age and years married by religiosity.
++ Both the intercepts and the relationship between age and years married differ by religiosity.
+
+
+
+## Dummy Variables on the LHS?
+
++ Warning, I will show you the Linear probability model but the real way of doing this is probit or logit.
++ The linear probability model (LP) works well when the probabilities are near .5 but can give odd results when far from that.  Odd is defined as probabilities greater than 1 or less than 0.
++ Example: Bowdlerized data from early alerts.  Bowdlerized has a few definitions.  Most are pretty funny.  I use it to indicate that it is anonymized but also actions have been taken to make it very hard to identify the source.
+
+
+
+# $R^2$, $\hat{\sigma^2}$ and Forecasting
+
++ Comments on adjusted R^2.  Avoid.  It goes up when the new variable has a t-stat >1
+
+
+# Too many or two few
+
++ Two many is often diagnosed by thinking about marginal effects only and deciding what the paramters represent.
+
++ Adding is nice when you find a variable that is correlated with Y and not with any of the x variables.  It won't bias things but it will make the standard error smaller and therefore tighten up the confidence intervals on your estimates.

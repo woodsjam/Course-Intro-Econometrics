@@ -152,9 +152,26 @@ You can also test with the inverse and some statistical software does that.  Jus
 
 + Create another murder regression but use Assault, UrbanPop and Rape to explain murder.  Save the result of that regression.
 
+```{r}
+lm_big_murder <- lm(Murder ~ Assault + UrbanPop + Rape , data = USArrests)
+
+summary(lm_big_murder)
+```
+
+
 + Do the same for a restricted model that does not include Assault and Rape.
 
+```{r}
+lm_restricted <- lm(Murder ~ UrbanPop , data = USArrests)
+```
+
+
 + Now perform an F-test, `anova(model2 , model1, test = "F" )` in R.  Was the restriction, NOT including the other variables, significant?
+
+
+```{r}
+anova(lm_restricted, lm_big_murder, test = "F")
+```
 
 + Now look at the F-test at the bottom of the summary output for model1.  That is a test between a model with only an intercept term and the model you specified.  What did you see?
 
@@ -171,13 +188,14 @@ Lets go back to our murder regressions and try two non-nested models.
 library(lmtest)
 library(wooldridge)
 data("USArrests")
+
 lm_murder_pop <- lm(Murder ~ UrbanPop, data = USArrests)
 
 lm_aug <- lm(Murder ~  Assault, data = USArrests)
 
 ```
 
-You notice that the two models don't nest.  Both the models could be thought of as restriced versions of  `lm(Murder ~  Assault + UrbanPop, data = USArrests)`, but we aren't testing that right now.
+You notice that the two models don't nest.  Both the models could be thought of as restricted versions of  `lm(Murder ~  Assault + UrbanPop, data = USArrests)`, but we aren't testing that right now.
 
 What the J-Test does is that it augments each regression with the forecasted LHS of the other equation.  The chunk below adds the augmented forecasts of the LHS variable to the data frame.
 
@@ -223,6 +241,7 @@ What is interesting about the J-Test is that it fails when the models _are_ nest
 
 ```{r}
 lm_murder_pop <- lm(Murder ~ UrbanPop, data = USArrests)
+
 lm_murder_unrestricted <- lm(Murder ~ UrbanPop + Assault, data = USArrests)
 
 ```
