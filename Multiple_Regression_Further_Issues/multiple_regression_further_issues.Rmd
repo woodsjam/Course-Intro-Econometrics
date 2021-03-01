@@ -285,11 +285,18 @@ affairs %>%
 
 ## Dummy Variables on the LHS?
 
-+ Warning, I will show you the Linear probability model but the real way of doing this is probit or logit.
-+ The linear probability model (LP) works well when the probabilities are near .5 but can give odd results when far from that.  Odd is defined as probabilities greater than 1 or less than 0.
-+ Example: Bowdlerized data from early alerts.  Bowdlerized has a few definitions.  Most are pretty funny.  I use it to indicate that it is anonymized but also actions have been taken to make it very hard to identify the source.
 
+Yes, you can do this.  We do it all the time.  What you are learning now is the linear probablility model.  It uses a line to approximate the relationship between your variables and the probablity of a TRUE.  This means you can have a probability greater than 1 or less than zero, which makes no sense.  This works best with probabilities near .5.
 
+The real way of doing it is through a probit or logit model, which uses the line that you estimate and transforms it through the Normal CDF, in the case of the probit.
+
++ Load in the data from slack with `read_csv`
++ Pull a summary to make sure the data looks sane.
++ Deal with any data type issues.  Make sure categorical variables are factors and the like.
++ Look at the data with `ggpairs()` to get some analyisis ideas.
++ OK, lets build some theories and ideas about signs and significance before we model.  What should interact?  
++ Build models
++ Interpret every parameter.  Who is the leftout case?
 
 # $R^2$, $\hat{\sigma^2}$ and Forecasting
 
